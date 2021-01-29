@@ -1,12 +1,12 @@
 package com.akashmjain.BlogApplication.controller;
 
 import com.akashmjain.BlogApplication.enitity.User;
-import com.akashmjain.BlogApplication.service.UserService;
-import com.akashmjain.BlogApplication.service.UserServiceImpl;
+import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
@@ -26,13 +26,16 @@ public class UserController {
          return "show_users";
     }
 
+    @GetMapping("/user/{userId}")
+    public String getUser(@PathVariable int userId, Model model) {
+        User user = userService.findById(userId);
+        if(user == null) {
+            System.out.println("user not found");
+        }
+        model.addAttribute("users",user);
+        return "show_users";
+    }
 
-    /*
-    @GetMapping("/")
-    public String helloWorld(Model theModel) {
-        theModel.addAttribute("theDate", new Date());
-        return "helloworld";
-    }*/
 }
 
 

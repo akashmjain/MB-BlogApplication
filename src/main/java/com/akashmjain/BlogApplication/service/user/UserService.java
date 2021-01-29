@@ -1,4 +1,4 @@
-package com.akashmjain.BlogApplication.service;
+package com.akashmjain.BlogApplication.service.user;
 
 import com.akashmjain.BlogApplication.enitity.User;
 

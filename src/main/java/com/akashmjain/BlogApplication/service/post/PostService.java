@@ -9,7 +9,7 @@ public interface PostService {
 
     public Post findById(int theId);
 
-    public void save(Post theEmployee);
+    public void save(Post post);
 
     public void deleteById(int theId);
 }

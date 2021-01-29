@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.Date;
 
 @Controller
+@RequestMapping("/post")
 public class PostController {
     private PostService postService;
 

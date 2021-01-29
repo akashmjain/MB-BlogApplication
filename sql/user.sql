@@ -20,15 +20,3 @@ CREATE TABLE users (
 INSERT INTO users(name, email, password) VALUES ('Akash', 'akash@akashmjain.com', 'akash123'), ('John', 'john@doe.com', 'john123'), ('Carter', 'carter@smith.com', 'carter123'), ('Hana', 'hana@matsuri.com', 'hana123'), ('Yuri', 'yuri@kawasaki.com', 'yuri123');
 
 
--- MYSQL VERSION 1.1
-DROP TABLE IF EXISTS 'users';
-
-CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(45) DEFAULT NULL,
-  `email` varchar(45) DEFAULT NULL,
-  `password` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1;
-
-INSERT INTO `users` (name, email, password) VALUES ('Akash', 'akash@akashmjain.com', 'akash123'), ('John', 'john@doe.com', 'john123'), ('Carter', 'carter@smith.com', 'carter123'), ('Hana', 'hana@matsuri.com', 'hana123'), ('Yuri', 'yuri@kawasaki.com', 'yuri123');

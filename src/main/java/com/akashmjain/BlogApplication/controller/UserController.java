@@ -7,10 +7,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
 @Controller
+@RequestMapping("/user")
 public class UserController {
     private UserService userService;
 
@@ -19,14 +21,14 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/user")
+    @GetMapping("/find")
     public String findAll(Model model) {
          List<User> users = userService.findAll();
          model.addAttribute("users", users);
          return "show_users";
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/find/{userId}")
     public String getUser(@PathVariable int userId, Model model) {
         User user = userService.findById(userId);
         if(user == null) {

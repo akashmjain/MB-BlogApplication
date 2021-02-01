@@ -2,6 +2,7 @@ package com.akashmjain.BlogApplication.enitity;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
@@ -34,6 +35,16 @@ public class Post {
 
     @Column(name = "updated_at")
     private Date updatedAt;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST,
+                        CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> postTags;
+
 
     public int getId() {
         return id;

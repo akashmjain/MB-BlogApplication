@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog Application</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Josefin Slab', serif;
+            background: #0B0B0B;
+            color: white;
+            font-weight: bolder;
+            font-size: 1.5em;
+            margin-left: 10%;
+            margin-right: 10%;
+        } 
+        a {
+            text-decoration: none;
+            color: yellow;
+        }
+        h1 {
+            font-size: 2.0em;
+            text-align: center; 
+        }
+        .blog {
+            border:solid;
+            
+        }
+        .blog-info {
+            display: flex;
+            justify-content: space-between;
+
+        }
+        .author-name {
+            padding-top: 4%;
+            margin-left: 2%;
+            font-size: 1.0em;
+        }
+        .blog-title {
+            font-size: 1.0em;
+            margin-left: 2%;
+        }
+        .blog-excerpt {
+            font-size: 0.8em;
+            margin-left: 2%;
+        }
+        .tag-list {
+            display: flex;
+            justify-content: flex-end;
+            
+        }
+        .tag {
+            list-style-type: none;
+            font-size: 0.5em;
+            margin: 1%;
+            padding: 0.5%;
+            border: solid white;
+            color: yellow;
+        }
+        .blog-timestamp {
+            margin-right: 2%;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blog Application</h1>
+    <div class="blog">
+        <h3 class="blog-title">Title of blog</h3>
+        <p class="blog-excerpt">Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut incidunt magni possimus molestiae doloremque officiis aliquam minima hic est nam....<a href="#">read more</a></p>
+    
+        <span class="blog-info">
+            <a class="author-name" href="#">author name</a>
+            <p class="blog-timestamp">13/03/1997 </p>
+        </span>
+        <ul class="tag-list">
+            <li class="tag">tag 1</li>
+            <li class="tag">tag 2</li>
+            <li class="tag">tag 3</li>
+        </ul>
+    </div>  
+</body>
+</html>
+

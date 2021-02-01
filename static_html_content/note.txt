@@ -1,0 +1,8 @@
+update table in database to give date value
+sort comments using date
+
+arhive text remove it
+
+space after if condition
+ex. if () is good
+and if() is not good

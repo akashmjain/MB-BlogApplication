@@ -21,7 +21,7 @@ public class PostController {
 
     @GetMapping("/")
     public String helloWorld(Model model) {
-        model.addAttribute("posts", postService.findAll());
+        model.addAttribute("data", postService.findAll());
         return "hello_world";
     }
 }

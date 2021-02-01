@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Josefin Slab', serif;
+            background: #0B0B0B;
+            color: white;
+            font-weight: bolder;
+            font-size: 1.5em;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+        a {
+            text-decoration: none;
+        }
+        h1 {
+            font-size: 2.0em;
+            text-align: center;
+        }
+        .blog {
+            border:solid;
+            margin-bottom: 2%;
+            padding: 2%;
+        }
+        .blog-info {
+            display: flex;
+            justify-content: space-between;
+
+        }
+        .author-name {
+            padding-top: 4%;
+            margin-left: 2%;
+            font-size: 1.0em;
+            color: yellow;
+        }
+        .blog-title {
+            font-size: 2.0em;
+            margin-left: 2%;
+
+            color: white;
+        }
+        .blog-excerpt {
+            font-size: 0.8em;
+            margin-left: 2%;
+        }
+        .tag-list {
+            display: flex;
+            justify-content: flex-end;
+
+        }
+        .tag {
+            list-style-type: none;
+            font-size: 0.5em;
+            margin: 1%;
+            padding: 0.5%;
+            border: solid white;
+            color: yellow;
+        }
+        .blog-timestamp {
+            margin-right: 2%;
+            font-size: 0.8em;
+        }
+    </style>
+</head>
+<body>
+    <h1>Blog Application</h1>
+
+
+    <div th:each="post: ${posts}" class="blog">
+        <a th:href="@{show(id=${post.id})}" class="blog-title" th:text="${post.title}"></a>
+        <p class="blog-excerpt" th:text="${post.excerpt}"></p>
+        <span class="blog-info">
+                <a class="author-name" href="#" th:text="${post.author}"></a>
+                <p class="blog-timestamp" th:text="${post.publishedAt}"></p>
+            </span>
+        <ul class="tag-list">
+            <li class="tag">tag 1</li>
+            <li class="tag">tag 2</li>
+            <li class="tag">tag 3</li>
+        </ul>
+    </div>
+</body>
+</html>

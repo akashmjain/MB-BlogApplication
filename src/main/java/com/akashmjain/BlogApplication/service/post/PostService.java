@@ -1,15 +1,15 @@
 package com.akashmjain.BlogApplication.service.post;
 
-import com.akashmjain.BlogApplication.enitity.Post;
+import com.akashmjain.BlogApplication.enitity.PostEntity;
 
 import java.util.List;
 
 public interface PostService {
-    public List<Post> findAll();
+    public List<PostEntity> findAll();
 
-    public Post findById(int theId);
+    public PostEntity findById(int theId);
 
-    public void save(Post post);
+    public void save(PostEntity postEntity);
 
     public void deleteById(int theId);
 }

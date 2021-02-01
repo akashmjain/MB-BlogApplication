@@ -1,7 +1,7 @@
 package com.akashmjain.BlogApplication.service.tag;
 
 import com.akashmjain.BlogApplication.dao.TagRepository;
-import com.akashmjain.BlogApplication.enitity.Tag;
+import com.akashmjain.BlogApplication.enitity.TagEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,26 +18,26 @@ public class TagServiceImpl implements TagService {
     }
 
     @Override
-    public List<Tag> findAll() {
+    public List<TagEntity> findAll() {
         return tagRepository.findAll();
     }
 
     @Override
-    public Tag findById(int theId) {
-        Optional<Tag> optional = tagRepository.findById(theId);
-        Tag tag = null;
+    public TagEntity findById(int theId) {
+        Optional<TagEntity> optional = tagRepository.findById(theId);
+        TagEntity tagEntity = null;
         if(optional.isPresent()) {
-            tag = optional.get();
+            tagEntity = optional.get();
         } else {
             //TODO: Here change this with exception later
             System.out.println("Error from Tag Service ");
         }
-        return tag;
+        return tagEntity;
     }
 
     @Override
-    public void save(Tag tag) {
-        tagRepository.save(tag);
+    public void save(TagEntity tagEntity) {
+        tagRepository.save(tagEntity);
     }
 
     @Override

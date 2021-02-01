@@ -1,11 +1,12 @@
 package com.akashmjain.BlogApplication.enitity;
 
 import javax.persistence.*;
-import java.sql.Date;
+import java.sql.Timestamp;
+import java.util.List;
 
 @Entity
 @Table(name = "posts")
-public class Post {
+public class PostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -20,20 +21,35 @@ public class Post {
     @Column(name = "content")
     private String content;
 
-    @Column(name = "author")
-    private String author;
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                            CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinColumn(name = "user_id")
+    private Users author;
 
     @Column(name = "published_at")
-    private Date publishedAt;
+    private Timestamp publishedAt;
 
     @Column(name = "is_published")
     private boolean isPublished;
 
     @Column(name = "created_at")
-    private Date createdAt;
+    private Timestamp createdAt;
 
     @Column(name = "updated_at")
-    private Date updatedAt;
+    private Timestamp updatedAt;
+
+    @OneToMany(mappedBy = "postEntity",
+                    cascade = {CascadeType.PERSIST, CascadeType.MERGE,
+                                CascadeType.DETACH, CascadeType.REFRESH})
+    private List<CommentEntity> commentEntities;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<TagEntity> tagEntities;
 
     public int getId() {
         return id;
@@ -67,19 +83,19 @@ public class Post {
         this.content = content;
     }
 
-    public String getAuthor() {
+    public Users getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author) {
+    public void setAuthor(Users author) {
         this.author = author;
     }
 
-    public Date getPublishedAt() {
+    public Timestamp getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(Date publishedAt) {
+    public void setPublishedAt(Timestamp publishedAt) {
         this.publishedAt = publishedAt;
     }
 
@@ -91,20 +107,36 @@ public class Post {
         isPublished = published;
     }
 
-    public Date getCreatedAt() {
+    public Timestamp getCreatedAt() {
         return createdAt;
     }
 
-    public void setCreatedAt(Date createdAt) {
+    public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
 
-    public Date getUpdatedAt() {
+    public Timestamp getUpdatedAt() {
         return updatedAt;
     }
 
-    public void setUpdatedAt(Date updatedAt) {
+    public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public List<CommentEntity> getComments() {
+        return commentEntities;
+    }
+
+    public void setComments(List<CommentEntity> commentEntities) {
+        this.commentEntities = commentEntities;
+    }
+
+    public List<TagEntity> getTags() {
+        return tagEntities;
+    }
+
+    public void setTags(List<TagEntity> tagEntities) {
+        this.tagEntities = tagEntities;
     }
 
     @Override
@@ -114,11 +146,13 @@ public class Post {
                 ", title='" + title + '\'' +
                 ", excerpt='" + excerpt + '\'' +
                 ", content='" + content + '\'' +
-                ", author='" + author + '\'' +
+                ", author=" + author +
                 ", publishedAt=" + publishedAt +
                 ", isPublished=" + isPublished +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
+                ", comments=" + commentEntities +
+                ", tagEntities=" + tagEntities +
                 '}';
     }
 }

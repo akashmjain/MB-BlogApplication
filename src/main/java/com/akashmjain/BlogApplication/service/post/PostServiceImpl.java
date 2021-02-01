@@ -1,8 +1,7 @@
 package com.akashmjain.BlogApplication.service.post;
 
 import com.akashmjain.BlogApplication.dao.PostRepository;
-import com.akashmjain.BlogApplication.dao.UserRepository;
-import com.akashmjain.BlogApplication.enitity.Post;
+import com.akashmjain.BlogApplication.enitity.PostEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -19,25 +18,25 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public List<Post> findAll() {
+    public List<PostEntity> findAll() {
         return postRepository.findAll();
     }
 
     @Override
-    public Post findById(int theId) {
-        Optional<Post> result = postRepository.findById(theId);
-        Post post = null;
+    public PostEntity findById(int theId) {
+        Optional<PostEntity> result = postRepository.findById(theId);
+        PostEntity postEntity = null;
         if(result.isPresent()) {
-            post = result.get();
+            postEntity = result.get();
         } else {
             // @TODO throw new RuntimeException here
             System.out.println("Hey problem is there");
         }
-        return post;
+        return postEntity;
     }
 
     @Override
-    public void save(Post theEmployee) {
+    public void save(PostEntity theEmployee) {
         postRepository.save(theEmployee);
     }
 

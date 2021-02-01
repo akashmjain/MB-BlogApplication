@@ -1,0 +1,23 @@
+-- Tags with relations included
+
+DROP TABLE IF EXISTS post_tags;
+
+CREATE TABLE post_tags (
+  post_id int NOT NULL,
+  tag_id int NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (post_id, tag_id),
+
+
+  CONSTRAINT FK_POST FOREIGN KEY (post_id) 
+  REFERENCES posts (id) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION,
+  
+  CONSTRAINT FK_TAG FOREIGN KEY (tag_id) 
+  REFERENCES tags (id) 
+  ON DELETE NO ACTION ON UPDATE NO ACTION
+);
+
+
+CREATE INDEX FK_POST_idx ON post_tags (post_id);

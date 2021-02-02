@@ -3,6 +3,9 @@ package com.akashmjain.BlogApplication.service.post;
 import com.akashmjain.BlogApplication.dao.PostRepository;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,12 @@ public class PostServiceImpl implements PostService{
     @Override
     public List<PostEntity> findAll() {
         return postRepository.findAll();
+    }
+
+    @Override
+    public Page<PostEntity> findPages(Pageable page) {
+        Page<PostEntity> pages = postRepository.findAll(page);
+        return pages;
     }
 
     @Override

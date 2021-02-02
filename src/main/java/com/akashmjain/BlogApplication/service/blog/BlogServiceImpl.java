@@ -7,9 +7,12 @@ import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 @Service
@@ -17,6 +20,7 @@ public class BlogServiceImpl implements BlogService{
     private PostService postService;
     private UserService userService;
     private TagService tagService;
+
 
     @Autowired
     public BlogServiceImpl(PostService postService, UserService userService, TagService tagService) {
@@ -26,8 +30,10 @@ public class BlogServiceImpl implements BlogService{
     }
 
     @Override
-    public List<PostEntity> getBlogPostsForFrontPage() {
-        return postService.findAll();
+    public Page<PostEntity> getBlogPostsForFrontPage(int pageNo, int limit, Model model) {
+        Pageable page = PageRequest.of(pageNo, limit);
+        Page<PostEntity> posts = postService.findPages(page);
+        return posts;
     }
 
     @Override
@@ -47,10 +53,4 @@ public class BlogServiceImpl implements BlogService{
         return tag.getPosts();
     }
 
-    /*
-    @Override
-    public List<PostEntity> getBlogPostsByPublishedDateTime(Timestamp timestamp) {
-
-        return null;
-    }*/
 }

@@ -23,7 +23,6 @@
             text-align: center;
         }
         .blog {
-            border:solid;
             margin-bottom: 2%;
             padding: 2%;
         }
@@ -65,11 +64,25 @@
             margin-right: 2%;
             font-size: 0.8em;
         }
+        .next-page-div {
+            display: flex;
+            margin: 10%;
+        }
+        .next-page-button {
+            color: yellow;
+            padding: 2%;
+            background-color: grey;
+            margin: 2%;
+        }
     </style>
 </head>
 <body>
 <h1>Blog Application</h1>
 
+<!-- Here you need button or page as a button-->
+<div class="next-page-div">
+    <a th:each="i: ${#numbers.sequence(0, totalPages - 1)}" class="next-page-button" th:text="${i+1}" th:href="@{/(page=${i})}"></a>
+</div>
 
 <div th:each="post: ${posts}" class="blog">
     <a th:href="@{blog(id=${post.id})}" class="blog-title" th:text="${post.title}"></a>
@@ -82,7 +95,5 @@
         <li th:each="tag: ${post.tags}" class="tag" th:text="${tag.name}"></li>
     </ul>
 </div>
-<!-- Here you need button or page as a button-->
-
 </body>
 </html>

@@ -23,16 +23,16 @@ public class UserEntity {
     @OneToMany(mappedBy = "author",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
-    private List<PostEntity> postEntities;
+    private List<PostEntity> posts;
 
     public UserEntity() {}
 
-    public UserEntity(int id, String name, String email, String password, List<PostEntity> postEntities) {
+    public UserEntity(int id, String name, String email, String password, List<PostEntity> posts) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
-        this.postEntities = postEntities;
+        this.posts = posts;
     }
 
     public int getId() {
@@ -67,24 +67,13 @@ public class UserEntity {
         this.password = password;
     }
 
-    public List<PostEntity> getPostEntities() {
-        return postEntities;
+    public List<PostEntity> getPosts() {
+        return posts;
     }
 
-    public void setPostEntities(List<PostEntity> postEntities) {
-        this.postEntities = postEntities;
+    public void setPosts(List<PostEntity> posts) {
+        this.posts = posts;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", posts=" + postEntities +
-                '}';
-    }*/
 }
 

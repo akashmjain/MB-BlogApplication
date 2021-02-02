@@ -5,7 +5,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
-@Table(name = "tagEntities")
+@Table(name = "tags")
 public class TagEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +23,12 @@ public class TagEntity {
 
     public TagEntity() {}
 
-    public TagEntity(int id, String name, Timestamp createdAt, Timestamp updatedAt, List<PostEntity> postEntities) {
+    public TagEntity(int id, String name, Timestamp createdAt, Timestamp updatedAt, List<PostEntity> posts) {
         this.id = id;
         this.name = name;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.postEntities = postEntities;
+        this.posts = posts;
     }
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -37,10 +37,7 @@ public class TagEntity {
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
-
-
-
-    private List<PostEntity> postEntities;
+    private List<PostEntity> posts;
 
     public int getId() {
         return id;
@@ -75,23 +72,11 @@ public class TagEntity {
     }
 
     public List<PostEntity> getPosts() {
-        return postEntities;
+        return posts;
     }
 
-    public void setPosts(List<PostEntity> postEntities) {
-        this.postEntities = postEntities;
+    public void setPosts(List<PostEntity> posts) {
+        this.posts = posts;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "Tag{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", posts=" + postEntities +
-                '}';
-    }
-    */
 }

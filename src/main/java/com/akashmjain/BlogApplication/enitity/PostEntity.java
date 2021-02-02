@@ -41,11 +41,19 @@ public class PostEntity {
     @OneToMany(mappedBy = "postEntity",
                     cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                                 CascadeType.DETACH, CascadeType.REFRESH})
-    private List<CommentEntity> commentEntities;
+    private List<CommentEntity> comments;
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private List<TagEntity> tags;
 
     public PostEntity() {}
 
-    public PostEntity(int id, String title, String excerpt, String content, UserEntity author, Timestamp publishedAt, boolean isPublished, Timestamp createdAt, Timestamp updatedAt, List<CommentEntity> commentEntities, List<TagEntity> tagEntities) {
+    public PostEntity(int id, String title, String excerpt, String content, UserEntity author, Timestamp publishedAt, boolean isPublished, Timestamp createdAt, Timestamp updatedAt, List<CommentEntity> comments, List<TagEntity> tags) {
         this.id = id;
         this.title = title;
         this.excerpt = excerpt;
@@ -55,21 +63,9 @@ public class PostEntity {
         this.isPublished = isPublished;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
-        this.commentEntities = commentEntities;
-        this.tagEntities = tagEntities;
+        this.comments = comments;
+        this.tags = tags;
     }
-
-
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name = "post_tags",
-            joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns = @JoinColumn(name = "tag_id")
-    )
-
-
-    private List<TagEntity> tagEntities;
 
     public int getId() {
         return id;
@@ -144,36 +140,19 @@ public class PostEntity {
     }
 
     public List<CommentEntity> getComments() {
-        return commentEntities;
+        return comments;
     }
 
-    public void setComments(List<CommentEntity> commentEntities) {
-        this.commentEntities = commentEntities;
+    public void setComments(List<CommentEntity> comments) {
+        this.comments = comments;
     }
 
     public List<TagEntity> getTags() {
-        return tagEntities;
+        return tags;
     }
 
-    public void setTags(List<TagEntity> tagEntities) {
-        this.tagEntities = tagEntities;
+    public void setTags(List<TagEntity> tags) {
+        this.tags = tags;
     }
 
-    /*
-    @Override
-    public String toString() {
-        return "Post{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", excerpt='" + excerpt + '\'' +
-                ", content='" + content + '\'' +
-                ", author=" + author +
-                ", publishedAt=" + publishedAt +
-                ", isPublished=" + isPublished +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                ", comments=" + commentEntities +
-                ", tagEntities=" + tagEntities +
-                '}';
-    }*/
 }

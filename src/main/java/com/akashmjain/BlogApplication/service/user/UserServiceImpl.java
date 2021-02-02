@@ -1,7 +1,7 @@
 package com.akashmjain.BlogApplication.service.user;
 
 import com.akashmjain.BlogApplication.dao.UserRepository;
-import com.akashmjain.BlogApplication.enitity.Users;
+import com.akashmjain.BlogApplication.enitity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,24 +18,24 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Users> findAll() {
+    public List<UserEntity> findAll() {
         return userRepository.findAll();
     }
 
     @Override
-    public Users findById(int theId) {
-        Optional<Users> result = userRepository.findById(theId);
-        Users users = null;
+    public UserEntity findById(int theId) {
+        Optional<UserEntity> result = userRepository.findById(theId);
+        UserEntity userEntity = null;
         if(result.isPresent()) {
-            users = result.get();
+            userEntity = result.get();
         } else {
             throw new RuntimeException("User not found with ID - " + theId);
         }
-        return users;
+        return userEntity;
     }
 
     @Override
-    public void save(Users theEmployee) {
+    public void save(UserEntity theEmployee) {
         userRepository.save(theEmployee);
     }
 

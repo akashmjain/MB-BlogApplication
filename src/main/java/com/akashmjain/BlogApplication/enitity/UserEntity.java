@@ -5,7 +5,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "users")
-public class Users {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -25,12 +25,14 @@ public class Users {
                     CascadeType.DETACH, CascadeType.REFRESH})
     private List<PostEntity> postEntities;
 
-    public Users() {}
+    public UserEntity() {}
 
-    public Users(String name, String email, String password) {
+    public UserEntity(int id, String name, String email, String password, List<PostEntity> postEntities) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
+        this.postEntities = postEntities;
     }
 
     public int getId() {
@@ -73,6 +75,7 @@ public class Users {
         this.postEntities = postEntities;
     }
 
+    /*
     @Override
     public String toString() {
         return "User{" +
@@ -82,6 +85,6 @@ public class Users {
                 ", password='" + password + '\'' +
                 ", posts=" + postEntities +
                 '}';
-    }
+    }*/
 }
 

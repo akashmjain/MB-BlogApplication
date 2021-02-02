@@ -1,15 +1,15 @@
 package com.akashmjain.BlogApplication.service.user;
 
-import com.akashmjain.BlogApplication.enitity.Users;
+import com.akashmjain.BlogApplication.enitity.UserEntity;
 
 import java.util.List;
 
 public interface UserService {
-    public List<Users> findAll();
+    public List<UserEntity> findAll();
 
-    public Users findById(int theId);
+    public UserEntity findById(int theId);
 
-    public void save(Users users);
+    public void save(UserEntity userEntity);
 
     public void deleteById(int theId);
 }

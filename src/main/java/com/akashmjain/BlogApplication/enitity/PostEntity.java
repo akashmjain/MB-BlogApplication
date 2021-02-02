@@ -23,8 +23,8 @@ public class PostEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                             CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinColumn(name = "user_id")
-    private Users author;
+    @JoinColumn(name = "author")
+    private UserEntity author;
 
     @Column(name = "published_at")
     private Timestamp publishedAt;
@@ -43,12 +43,32 @@ public class PostEntity {
                                 CascadeType.DETACH, CascadeType.REFRESH})
     private List<CommentEntity> commentEntities;
 
+    public PostEntity() {}
+
+    public PostEntity(int id, String title, String excerpt, String content, UserEntity author, Timestamp publishedAt, boolean isPublished, Timestamp createdAt, Timestamp updatedAt, List<CommentEntity> commentEntities, List<TagEntity> tagEntities) {
+        this.id = id;
+        this.title = title;
+        this.excerpt = excerpt;
+        this.content = content;
+        this.author = author;
+        this.publishedAt = publishedAt;
+        this.isPublished = isPublished;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.commentEntities = commentEntities;
+        this.tagEntities = tagEntities;
+    }
+
+
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "post_tags",
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+
+
     private List<TagEntity> tagEntities;
 
     public int getId() {
@@ -83,11 +103,11 @@ public class PostEntity {
         this.content = content;
     }
 
-    public Users getAuthor() {
+    public UserEntity getAuthor() {
         return author;
     }
 
-    public void setAuthor(Users author) {
+    public void setAuthor(UserEntity author) {
         this.author = author;
     }
 
@@ -139,6 +159,7 @@ public class PostEntity {
         this.tagEntities = tagEntities;
     }
 
+    /*
     @Override
     public String toString() {
         return "Post{" +
@@ -154,5 +175,5 @@ public class PostEntity {
                 ", comments=" + commentEntities +
                 ", tagEntities=" + tagEntities +
                 '}';
-    }
+    }*/
 }

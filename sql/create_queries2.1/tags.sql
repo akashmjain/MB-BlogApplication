@@ -17,3 +17,13 @@ CREATE TABLE tags (
 ALTER SEQUENCE tags_seq RESTART WITH 1;
 
 
+-- dummy data
+insert into tags (name) values ('Aquamarine');
+insert into tags (name) values ('Teal');
+insert into tags (name) values ('Mauv');
+insert into tags (name) values ('Crimson');
+insert into tags (name) values ('Violet');
+insert into tags (name) values ('Blue');
+insert into tags (name) values ('Yellow');
+insert into tags (name) values ('Turquoise');
+insert into tags (name) values ('Puce');

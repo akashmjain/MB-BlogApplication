@@ -30,6 +30,18 @@ public class CommentEntity {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    public CommentEntity() {}
+
+    public CommentEntity(int id, String name, String email, String comment, PostEntity postEntity, Timestamp createdAt, Timestamp updatedAt) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.comment = comment;
+        this.postEntity = postEntity;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+    }
+
     public int getId() {
         return id;
     }
@@ -93,7 +105,6 @@ public class CommentEntity {
                 ", name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", comment='" + comment + '\'' +
-                ", post=" + postEntity +
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';

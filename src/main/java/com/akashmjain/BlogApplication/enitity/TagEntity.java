@@ -21,12 +21,25 @@ public class TagEntity {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    public TagEntity() {}
+
+    public TagEntity(int id, String name, Timestamp createdAt, Timestamp updatedAt, List<PostEntity> postEntities) {
+        this.id = id;
+        this.name = name;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        this.postEntities = postEntities;
+    }
+
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
     @JoinTable(
             name = "post_tags",
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
+
+
+
     private List<PostEntity> postEntities;
 
     public int getId() {
@@ -69,6 +82,7 @@ public class TagEntity {
         this.postEntities = postEntities;
     }
 
+    /*
     @Override
     public String toString() {
         return "Tag{" +
@@ -79,4 +93,5 @@ public class TagEntity {
                 ", posts=" + postEntities +
                 '}';
     }
+    */
 }

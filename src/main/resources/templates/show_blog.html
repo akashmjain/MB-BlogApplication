@@ -22,17 +22,7 @@
             font-size: 2.0em;
             text-align: center;
         }
-        .blog {
-            border:solid;
-            margin-bottom: 2%;
-            padding: 2%;
-        }
-        .blog-info {
-            display: flex;
-            justify-content: space-between;
-
-        }
-        .author-name {
+        .blog-author {
             padding-top: 4%;
             margin-left: 2%;
             font-size: 1.0em;
@@ -44,14 +34,10 @@
 
             color: white;
         }
-        .blog-excerpt {
-            font-size: 0.8em;
-            margin-left: 2%;
-        }
         .tag-list {
             display: flex;
             justify-content: flex-end;
-            flex-direction: row;
+
         }
         .tag {
             list-style-type: none;
@@ -69,18 +55,17 @@
 </head>
 <body>
 <h1>Blog Application</h1>
+<h3 class="blog-title" th:text="${blog.title}"></h3>
 
+<p th:text="${blog.content}"></p>
 
-<div th:each="post: ${posts}" class="blog">
-    <a th:href="@{blog(id=${post.id})}" class="blog-title" th:text="${post.title}"></a>
-    <p class="blog-excerpt" th:text="${post.excerpt}"></p>
-    <span class="blog-info">
-                <a class="author-name" href="#" th:text="${post.author.name}"></a>
-                <p class="blog-timestamp" th:text="${post.publishedAt}"></p>
-            </span>
-    <ul class="tag-list">
-        <li th:each="tag: ${post.tags}" class="tag" th:text="${tag.name}"></li>
-    </ul>
+</p>
+<a href="#" class="blog-author" th:text="${blog.author.name}"></a>
+<p class="blog-timestamp" th:text="${blog.publishedAt}">published date and time</p>
+<ul class="tag-list">
+    <li th:each="tag: ${blog.tags}" class="tag" th:text="${tag.name}"></li>
+</ul>
 </div>
+
 </body>
 </html>

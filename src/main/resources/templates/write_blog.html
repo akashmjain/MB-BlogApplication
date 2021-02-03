@@ -1,0 +1,71 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Insert title here</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+			font-family: 'Josefin Slab', serif;
+			background: #0B0B0B;
+            color: white;
+            font-size: 1.5em;
+            display: flex;
+            flex-direction: column;
+            padding-left: 10%;
+            padding-right: 10%;
+		}
+        span {
+            display: flex;
+            
+            flex-direction: column;
+            margin-top: 2%;
+            margin-bottom: 2%;
+        }
+        .text-input {
+            font-size: 1.5rem;
+            padding: 1%;
+            background-color: #0B0B0B;
+            color: white;
+        }
+        .text-input::selection .text-input::-moz-selection {
+            color: white;
+            background: grey;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 1%;
+            text-align: center;
+            font-size: 2.0rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: rgb(214, 202, 202);
+            border: solid grey;
+            border-radius: 2%;
+        }
+        .submit-btn:hover {
+            border-color: tomato;
+        }
+	</style>
+</head>
+<body>
+<div class="main">
+    <h1>Create/Update Blog</h1>
+    <form action="#" th:object="${post}" th:action="@{save}" method="post">
+            <span>
+                <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
+            </span>
+            <span>
+
+            </span>
+            <span>
+                <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input" placeholder="Write Your blog here"></textarea>
+            </span>
+        <input class="submit-btn" type="submit" value="Publish">
+    </form>
+
+</div>
+</body>
+</html>
+

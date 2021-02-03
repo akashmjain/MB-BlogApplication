@@ -53,4 +53,9 @@ public class BlogServiceImpl implements BlogService{
         return tag.getPosts();
     }
 
+    @Override
+    public void createOrUpdateBlog(String blogTitle, String tags, Model model) {
+//        postService.save();
+    }
+
 }

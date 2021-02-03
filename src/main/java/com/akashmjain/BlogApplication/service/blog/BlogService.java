@@ -17,5 +17,7 @@ public interface BlogService {
 
     public List<PostEntity> getBlogPostsByTags(int tagId);
 
+    void createOrUpdateBlog(String blogTitle, String tags, Model model);
+
     // public List<PostEntity> getBlogPostsByPublishedDateTime(Timestamp timestamp);
 }

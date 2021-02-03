@@ -92,7 +92,7 @@
                 <p class="blog-timestamp" th:text="${post.publishedAt}"></p>
             </span>
     <ul class="tag-list">
-        <li th:each="tag: ${post.tags}" class="tag" th:text="${tag.name}"></li>
+        <a th:each="tag: ${post.tags}" href="#" class="tag" th:text="${tag.name}"></a>
     </ul>
 </div>
 </body>

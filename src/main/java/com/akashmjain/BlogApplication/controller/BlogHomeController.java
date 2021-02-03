@@ -33,5 +33,6 @@ public class BlogHomeController {
         model.addAttribute("blog", blogService.getIndividualBlogPost(blogId));
         return "show_blog";
     }
+   
 }
 

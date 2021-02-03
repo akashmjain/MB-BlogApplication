@@ -61,6 +61,40 @@
             font-size: 1.5em;
 
         }
+        .text-input {
+            font-size: 1.5rem;
+            padding: 0.5%;
+            margin: 0.5%;
+            background-color: #0B0B0B;
+            color: white;
+            width: 70%;
+
+        }
+        .comment-form{
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            margin: 2%;
+        }
+        .submit-btn {
+            padding: 1%;
+            text-align: center;
+            font-size: 2.0rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: rgb(214, 202, 202);
+            border: solid grey;
+            border-radius: 2%;
+        }
+        .submit-btn:hover {
+            border-color: tomato;
+        }
+        .delete-button {
+            background: #e65656;
+            border: none;
+            padding: 1%;
+        }
     </style>
 </head>
 <body>
@@ -76,15 +110,27 @@
     <li th:each="tag: ${blog.tags}" class="tag" th:text="${tag.name}"></li>
 </ul>
 </div>
+<!--Comment submit section-->
+<div>
+    <form action="#" th:action="@{comment/save(postId=${blog.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+        <input th:field="*{name}" name="full_name" class ="text-input" type="text" placeholder="Full Name">
+        <input th:field="*{email}" name="email" class="text-input" type="email" placeholder="email">
+        <textarea th:field="*{comment}" name="comment" rows="5" class="text-input" placeholder="comment"></textarea>
+        <input class="submit-btn" type="submit" value="SUBMIT">
+    </form>
+</div>
 <!--Comment section-->
 <div th:each="comment: ${blog.comments}" class="comment">
     <h4 th:text="${comment.name}"></h4>
-    <a style="color: green;" href="mailto:example@email.com" th:text="${comment.email}"></a>
+    <a style="color: green;" th:href="@{mailto:(${comment.email})}" th:text="${comment.email}"></a>
     <p th:text="${comment.comment}"></p>
     <div style="display: flex; flex-direction: column; align-items: flex-end;">
         <span class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </span>
         <span class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></span>
     </div>
+    <form th:action="@{comment/delete(postId=${blog.id},commentId=${comment.id})}" method="post">
+        <input class="delete-button" type="submit" value="Delete">
+    </form>
 </div>
 </body>
 </html>

@@ -58,6 +58,41 @@
             font-size: 1.5em;
 
         }
+        .text-input {
+            font-size: 1.5rem;
+            padding: 0.5%;
+            margin: 0.5%;
+            background-color: #0B0B0B;
+            color: white;
+            width: 70%;
+            
+        }
+        .comment-form{
+            display: flex; 
+            flex-direction: column;
+
+            align-items: center;
+            margin: 2%;
+        }
+        .submit-btn {
+            padding: 1%;
+            text-align: center;
+            font-size: 2.0rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: rgb(214, 202, 202);
+            border: solid grey;
+            border-radius: 2%;
+        }
+        .submit-btn:hover {
+            border-color: tomato;
+        }
+        .delete-button {
+            background: #e65656;
+            border: none;
+            padding: 1%;
+        }
+        
     </style>
 </head>
 <body>
@@ -76,14 +111,26 @@
 </ul>
 </div>
 <!--Comment section-->
+<div>
+    <form action="contactus/save" method="post" class="comment-form">
+        <input name="full_name" class ="text-input" type="text" placeholder="Full Name">
+        <input name="email" class="text-input" type="email" placeholder="email">
+        <textarea name="comment" rows="5" class="text-input" placeholder="comment"></textarea>
+        <input class="submit-btn" type="submit" value="SUBMIT">
+    </form>
+</div>
 <div class="comment">
     <h4>Lorem, ipsum.</h4> 
     <a style="color: green;" href="mailto:example@email.com">example@email.com</a> 
     <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quibusdam eaque explicabo distinctio vero odio tempore aliquam quidem nulla repudiandae harum.</p>
+    
     <div style="display: flex; flex-direction: column; align-items: flex-end;">
         <span class="comment-timestamp">Created At : 2021-02-01 19:50:46.232275</span>
         <span class="comment-timestamp">Updated At : 2021-02-01 19:50:46.232275</span>
     </div>
+    <form action="#" method="post"> 
+        <input class="delete-button" type="submit" value="Delete">
+    </form>
 </div>
 </body>
 </html>

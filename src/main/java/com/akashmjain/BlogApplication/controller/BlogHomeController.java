@@ -1,7 +1,7 @@
 package com.akashmjain.BlogApplication.controller;
 
+import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
-import com.akashmjain.BlogApplication.service.blog.BlogService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
 
 @Controller
 public class BlogHomeController {
@@ -37,6 +36,7 @@ public class BlogHomeController {
     @RequestMapping("/blog")
     public String getIndividualBlog(@RequestParam("id") int blogId, Model model) {
         model.addAttribute("blog", postService.findById(blogId));
+        model.addAttribute("commentEntity", new CommentEntity());
         return "show_blog";
     }
 }

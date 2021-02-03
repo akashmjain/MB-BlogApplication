@@ -10,12 +10,8 @@ import java.util.Optional;
 
 @Service
 public class TagServiceImpl implements TagService {
-    TagRepository tagRepository;
-
     @Autowired
-    public TagServiceImpl(TagRepository tagRepository) {
-        this.tagRepository = tagRepository;
-    }
+    TagRepository tagRepository;
 
     @Override
     public List<TagEntity> findAll() {

@@ -13,12 +13,8 @@ import java.util.Optional;
 
 @Service
 public class PostServiceImpl implements PostService{
-    private PostRepository postRepository;
-
     @Autowired
-    public PostServiceImpl(PostRepository postRepository) {
-        this.postRepository = postRepository;
-    }
+    private PostRepository postRepository;
 
     @Override
     public List<PostEntity> findAll() {

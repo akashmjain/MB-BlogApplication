@@ -16,13 +16,6 @@
             padding-left: 10%;
             padding-right: 10%;
 		}
-        span {
-            display: flex;
-            
-            flex-direction: column;
-            margin-top: 2%;
-            margin-bottom: 2%;
-        }
         .text-input {
             font-size: 1.5rem;
             padding: 1%;
@@ -47,24 +40,28 @@
         .submit-btn:hover {
             border-color: tomato;
         }
+        .create-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .create-form * {
+            margin: 1%;
+            width: 100%;
+        }
+        .text-area {
+            resize: none;
+        }
 	</style>
 </head>
 <body>
 	<div class="main">
         <h1>Create/Update Blog</h1>
-        <form action="contactus/save" method="post">
-            <span>
-                <input name="full_name" class ="text-input" type="text" placeholder="Title">
-            </span>
-            <span>
-                <input name="email" class="text-input" type="email" placeholder="Tags put in this format(ex. #tag1 #tag2 )">
-            </span>
-            <span>
-                <textarea name="blog-textarea" rows="20" class="text-input" placeholder="Write Your blog here"></textarea>
-            </span>
-            <input class="submit-btn" type="submit" value="SUBMIT">
+        <form class="create-form" action="contactus/save" method="post">
+            <input name="full_name" class ="text-input" type="text" placeholder="Title">
+            <input name="email" class="text-input" type="email" placeholder="Tags put in this format(ex. #tag1 #tag2 )">
+            <textarea name="blog-textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
+            <input class="submit-btn" type="submit" value="SUBMIT">          
         </form>
-        
     </div>
 </body>
 </html>

@@ -16,13 +16,6 @@
             padding-left: 10%;
             padding-right: 10%;
 		}
-        span {
-            display: flex;
-            
-            flex-direction: column;
-            margin-top: 2%;
-            margin-bottom: 2%;
-        }
         .text-input {
             font-size: 1.5rem;
             padding: 1%;
@@ -47,24 +40,28 @@
         .submit-btn:hover {
             border-color: tomato;
         }
+        .create-form {
+            display: flex;
+            flex-direction: column;
+        }
+        .create-form * {
+            margin: 1%;
+            width: 100%;
+        }
+        .text-area {
+            resize: none;
+        }
 	</style>
 </head>
 <body>
 <div class="main">
     <h1>Create/Update Blog</h1>
-    <form action="#" th:object="${post}" th:action="@{save}" method="post">
-            <span>
-                <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
-            </span>
-            <span>
-
-            </span>
-            <span>
-                <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input" placeholder="Write Your blog here"></textarea>
-            </span>
+    <form th:object="${post}" class="create-form" action="#" th:action="@{save}" method="post">
+        <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
+        <input th:value="${tagStringData}" name="tag_string_data" class="text-input" type="text" placeholder="ags put in this format(ex. #tag1 #tag2 )">
+        <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
         <input class="submit-btn" type="submit" value="Publish">
     </form>
-
 </div>
 </body>
 </html>

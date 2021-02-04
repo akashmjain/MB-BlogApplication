@@ -39,5 +39,11 @@ public class BlogHomeController {
         model.addAttribute("commentEntity", new CommentEntity());
         return "show_blog";
     }
+    @RequestMapping("/blog/delete")
+    public String deleteBlog(@RequestParam("postId")int postId, Model model) {
+        postService.deleteById(postId);
+        return "redirect:/";
+    }
+
 }
 

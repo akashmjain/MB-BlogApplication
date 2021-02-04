@@ -92,7 +92,28 @@
             border: none;
             padding: 1%;
         }
-        
+        .edit-group {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .edit-group form {
+            margin: 2%;
+        }
+        .post-update-btn, .post-delete-btn{
+            font-size: 1.2em;
+            padding: 3%;
+            border: solid grey;
+            color: grey;
+            background-color: transparent;
+        }
+        .post-delete-btn {
+            background-color: #e65656;
+            color: black;
+        }
+        .post-update-btn:hover, .post-delete-btn:hover {
+            border: solid tomato;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -101,9 +122,16 @@
 
 <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Possimus dicta voluptate velit quos. Repudiandae magnam natus, quia quasi reprehenderit vero veritatis ut a neque quis illum perspiciatis tempore aspernatur, excepturi nisi fugit, nobis obcaecati deleniti ipsa vel officia harum? Eligendi, repudiandae? Eum omnis veniam qui consequatur fugit neque optio expedita exercitationem totam distinctio, ipsum inventore provident sapiente, quos at excepturi aliquid modi animi nulla eos nobis voluptate illo nihil? Nam incidunt cum earum reiciendis deserunt rerum neque, nostrum officiis ex pariatur eveniet vero quam excepturi recusandae quaerat architecto perferendis. Modi consequuntur architecto soluta sit voluptatum maxime cupiditate accusantium debitis error quod, voluptatibus, at laudantium deleniti facere voluptas nemo perspiciatis omnis dolor porro expedita veniam repellendus commodi perferendis. Suscipit deleniti laboriosam velit? Iure soluta illum cum reiciendis quaerat illo suscipit provident fuga expedita labore minus, facere quisquam ipsam, laboriosam a sint cumque itaque impedit. Impedit, non numquam inventore error dolor tempore cumque. Reiciendis, optio, vero eveniet iusto adipisci ad temporibus ducimus ab accusamus nam cupiditate voluptatem nesciunt totam quidem laudantium. Incidunt consequatur nobis odit facere ea, obcaecati consequuntur repellat aut at, numquam molestiae rem tempora perferendis blanditiis tempore quasi repellendus beatae, voluptate fuga vero! Ad sed ducimus doloremque fuga nemo enim labore suscipit quam, aperiam dolorem consequatur, excepturi facilis porro officia recusandae odit culpa odio beatae? Exercitationem eveniet laborum, ab architecto a ratione amet officiis esse cupiditate autem consectetur odit et similique fuga quis dignissimos, aliquid voluptas quidem natus laboriosam accusamus officia. Quas eos suscipit error, sapiente explicabo itaque voluptatem minus iste doloribus deleniti illum nihil tempora placeat, quae, dolorum omnis veritatis impedit animi? Sed nobis voluptatum, soluta ducimus et odio dolorem iure quae fugiat a repellendus voluptate, odit aut unde eveniet corporis ipsa incidunt itaque? Quas quia dignissimos earum, neque obcaecati, consectetur suscipit nobis labore voluptate quam perspiciatis fugit amet. Ab, aspernatur itaque eligendi officiis vitae error atque sunt praesentium harum hic quasi eius culpa dolores nulla quis cumque magnam asperiores quas ad quos earum veniam et maiores! Rem, est? Ratione, aut. Debitis nemo sit, eius officia odio dignissimos! Voluptates velit ducimus quia eius quidem distinctio, debitis molestias necessitatibus iure vero, consectetur sequi, neque dolorem quae tenetur corrupti assumenda cumque explicabo delectus? Quisquam, eos dicta! Sunt cumque autem ducimus doloremque dolore eveniet vitae veniam nemo id quisquam quo, voluptates voluptatem amet provident sapiente commodi numquam voluptatum aut. Rerum dicta ad, voluptatibus incidunt minus animi, harum voluptatum voluptate nesciunt distinctio aliquam aspernatur omnis ea tempore explicabo aperiam libero quidem eius est aliquid ipsa officiis dolorem obcaecati blanditiis. Delectus tempore excepturi neque aspernatur cumque recusandae quibusdam accusantium esse magnam vitae eos rem repudiandae, porro vero nam veritatis, in unde ea officia? Itaque repudiandae provident porro aliquid. Dolorem sint officiis soluta saepe ullam molestias perspiciatis ratione suscipit odio, mollitia voluptatibus praesentium eius maxime cupiditate facilis impedit ipsum magnam aperiam esse odit. Deserunt aperiam corporis, sequi ad nemo at in? Excepturi cupiditate, possimus unde laborum consequatur voluptate, sed eum aspernatur atque nostrum veritatis non enim similique doloremque dolor sapiente minima veniam totam, quia molestias.</p>
 
-</p>
 <a href="#" class="blog-author">Lorem, ipsum.</a>
 <p class="blog-timestamp">2021-02-01 19:50:46.232275</p>
+<div class="edit-group">
+    <form  action="#" method="post">
+        <input class="post-update-btn" type="submit" value="Update">
+    </form>
+    <form action="#" method="post">
+        <input class="post-delete-btn" type="submit" value="Delete">
+    </form>
+</div>
 <ul class="tag-list">
     <li class="tag">Aquamarine</li>
     <li class="tag">hypster</li>

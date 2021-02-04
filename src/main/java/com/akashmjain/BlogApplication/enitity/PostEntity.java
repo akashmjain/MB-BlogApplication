@@ -39,8 +39,7 @@ public class PostEntity {
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "postEntity",
-                    cascade = {CascadeType.PERSIST, CascadeType.MERGE,
-                                CascadeType.DETACH, CascadeType.REFRESH})
+                    cascade = {CascadeType.ALL})
     private List<CommentEntity> comments;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})

@@ -95,6 +95,28 @@
             border: none;
             padding: 1%;
         }
+        .edit-group {
+            display: flex;
+            justify-content: flex-end;
+        }
+        .edit-group form {
+            margin: 2%;
+        }
+        .post-update-btn, .post-delete-btn{
+            font-size: 1.2em;
+            padding: 3%;
+            border: solid grey;
+            color: grey;
+            background-color: transparent;
+        }
+        .post-delete-btn {
+            background-color: #e65656;
+            color: black;
+        }
+        .post-update-btn:hover, .post-delete-btn:hover {
+            border: solid tomato;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -106,6 +128,17 @@
 </p>
 <a href="#" class="blog-author" th:text="${blog.author.name}"></a>
 <p class="blog-timestamp" th:text="${blog.publishedAt}">published date and time</p>
+<!-- Delete and Update section -->
+<div class="edit-group">
+    <form th:action="@{blog/update(postId=${blog.id})}" method="post">
+        <input class="post-update-btn" type="submit" value="Update">
+    </form>
+    <form th:action="@{blog/delete(postId=${blog.id})}" action="" method="post">
+        <input class="post-delete-btn" type="submit" value="Delete">
+    </form>
+</div>
+
+<!--Tag section -->
 <ul class="tag-list">
     <li th:each="tag: ${blog.tags}" class="tag" th:text="${tag.name}"></li>
 </ul>

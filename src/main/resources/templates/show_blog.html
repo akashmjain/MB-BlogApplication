@@ -153,8 +153,8 @@
     <a style="color: green;" th:href="@{mailto:(${comment.email})}" th:text="${comment.email}"></a>
     <p th:text="${comment.comment}"></p>
     <div style="display: flex; flex-direction: column; align-items: flex-end;">
-        <span class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </span>
-        <span class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></span>
+        <p class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </p>
+        <p class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></p>
     </div>
     <a class="delete-button" th:href="@{/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
     <a class="delete-button" th:href="@{/comment/update(commentId=${comment.id})}">Update</a>

@@ -74,11 +74,11 @@ public class CommentEntity {
         this.comment = comment;
     }
 
-    public PostEntity getPost() {
+    public PostEntity getPostEntity() {
         return postEntity;
     }
 
-    public void setPost(PostEntity postEntity) {
+    public void setPostEntity(PostEntity postEntity) {
         this.postEntity = postEntity;
     }
 

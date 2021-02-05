@@ -6,6 +6,7 @@ import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,25 +21,25 @@ public class CommentController {
     private PostService postService;
 
     /* CREATE COMMENT */
-    @RequestMapping("/comment/save")
-    public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity, @RequestParam("postId") int postId) {
+    @RequestMapping("/comment/create")
+    public String createComment(@RequestParam("postId") int postId, Model model) {
         PostEntity postEntity = postService.findById(postId);
-        commentEntity.setPost(postEntity);
+        CommentEntity commentEntity = new CommentEntity();
         commentEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        if (commentEntity.getId() != 0) {
-            commentEntity.setId(0);
-        }
-        commentService.save(commentEntity);
-        return "redirect:/post/read?postId=" + postId;
+        commentEntity.setPostEntity(postEntity);
+        commentEntity.setId(0);
+        model.addAttribute("commentEntity", commentEntity);
+        return "comment_form";
     }
+
 
     /* UPDATE COMMENT */
     @RequestMapping("/comment/update")
-    public String updateComment(CommentEntity commentEntity, @RequestParam("postId") int postId) {
-        commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        commentService.save(commentEntity);
-        return "redirect:/post/read?postId=" + postId;
+    public String updateComment(@RequestParam("commentId") int commentId,Model model) {
+        CommentEntity commentEntity = commentService.findById(commentId);
+        model.addAttribute("commentEntity", commentEntity);
+        return "comment_form";
     }
 
     /* DELETE COMMENT */
@@ -46,5 +47,14 @@ public class CommentController {
     public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
         commentService.deleteById(commentId);
         return "redirect:/post/read?postId=" + postId;
+    }
+
+
+    /* INTERNALLY CALLED */
+    @RequestMapping("/comment/save")
+    public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
+        commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        commentService.save(commentEntity);
+        return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
     }
 }

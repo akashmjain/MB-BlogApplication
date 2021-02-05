@@ -49,7 +49,6 @@ public class PostController {
     @RequestMapping("/post/read")
     public String readPost(@RequestParam("postId") int postId, Model model) {
         model.addAttribute("postEntity", postService.findById(postId));
-        model.addAttribute("commentEntity", new CommentEntity());
         return "show_blog";
     }
 
@@ -68,6 +67,7 @@ public class PostController {
         return "redirect:/";
     }
 
+    /* Calling */
     @RequestMapping("/post/create/save")
     public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity) {
         postEntity.setAuthor(userService.findById(1));
@@ -82,6 +82,7 @@ public class PostController {
 
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity) {
+        postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postService.save(postEntity);
         return "redirect:/post/read?postId="+postEntity.getId();
     }

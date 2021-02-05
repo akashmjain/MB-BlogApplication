@@ -13,37 +13,38 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
 
 @Controller
-@RequestMapping("/comment")
 public class CommentController {
     @Autowired
     private CommentService commentService;
     @Autowired
     private PostService postService;
 
-    @RequestMapping("/save")
+    /* CREATE COMMENT */
+    @RequestMapping("/comment/save")
     public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity, @RequestParam("postId") int postId) {
         PostEntity postEntity = postService.findById(postId);
         commentEntity.setPost(postEntity);
         commentEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        // accidental update check. if someone send id by mistake still it will create new comment.
-        if(commentEntity.getId() != 0) {
+        if (commentEntity.getId() != 0) {
             commentEntity.setId(0);
         }
         commentService.save(commentEntity);
-        return "redirect:/blog?id="+postId;
+        return "redirect:/post/read?postId=" + postId;
     }
 
-    @RequestMapping("/delete")
-    public String deleteComment(@RequestParam("postId") int postId,@RequestParam("commentId") int commentId) {
-        commentService.deleteById(commentId);
-        return "redirect:/blog?id="+postId;
-    }
-
-    @RequestMapping("/update")
+    /* UPDATE COMMENT */
+    @RequestMapping("/comment/update")
     public String updateComment(CommentEntity commentEntity, @RequestParam("postId") int postId) {
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         commentService.save(commentEntity);
-        return "redirect:/blog?id="+postId;
+        return "redirect:/post/read?postId=" + postId;
+    }
+
+    /* DELETE COMMENT */
+    @RequestMapping("/comment/delete")
+    public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
+        commentService.deleteById(commentId);
+        return "redirect:/post/read?postId=" + postId;
     }
 }

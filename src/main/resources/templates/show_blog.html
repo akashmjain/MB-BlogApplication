@@ -121,31 +121,31 @@
 </head>
 <body>
 <h1>Blog Application</h1>
-<h3 class="blog-title" th:text="${blog.title}"></h3>
+<h3 class="blog-title" th:text="${postEntity.title}"></h3>
 
-<p th:text="${blog.content}"></p>
+<p th:text="${postEntity.content}"></p>
 
 </p>
-<a href="#" class="blog-author" th:text="${blog.author.name}"></a>
-<p class="blog-timestamp" th:text="${blog.publishedAt}">published date and time</p>
-<!-- Delete and Update section -->
+<a href="#" class="blog-author" th:text="${postEntity.author.name}"></a>
+<p class="blog-timestamp" th:text="${postEntity.publishedAt}">published date and time</p>
+<!-- Delete and Update section (here change inputs to anchor tags latter)-->
 <div class="edit-group">
-    <form th:action="@{blog/update(postId=${blog.id})}" method="post">
+    <form th:action="@{/post/update(postId=${postEntity.id})}" method="post">
         <input class="post-update-btn" type="submit" value="Update">
     </form>
-    <form th:action="@{blog/delete(postId=${blog.id})}" action="" method="post">
+    <form th:action="@{/post/delete(postId=${postEntity.id})}" action="" method="post">
         <input class="post-delete-btn" type="submit" value="Delete">
     </form>
 </div>
 
 <!--Tag section -->
 <ul class="tag-list">
-    <li th:each="tag: ${blog.tags}" class="tag" th:text="${tag.name}"></li>
+    <li th:each="tag: ${postEntity.tags}" class="tag" th:text="${tag.name}"></li>
 </ul>
 </div>
 <!--Comment submit section-->
 <div>
-    <form action="#" th:action="@{comment/save(postId=${blog.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+    <form action="#" th:action="@{/comment/save(postId=${postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
         <input th:field="*{name}" name="full_name" class ="text-input" type="text" placeholder="Full Name">
         <input th:field="*{email}" name="email" class="text-input" type="email" placeholder="email">
         <textarea th:field="*{comment}" name="comment" rows="5" class="text-input" placeholder="comment"></textarea>
@@ -153,7 +153,7 @@
     </form>
 </div>
 <!--Comment section-->
-<div th:each="comment: ${blog.comments}" class="comment">
+<div th:each="comment: ${postEntity.comments}" class="comment">
     <h4 th:text="${comment.name}"></h4>
     <a style="color: green;" th:href="@{mailto:(${comment.email})}" th:text="${comment.email}"></a>
     <p th:text="${comment.comment}"></p>
@@ -161,7 +161,7 @@
         <span class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </span>
         <span class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></span>
     </div>
-    <form th:action="@{comment/delete(postId=${blog.id},commentId=${comment.id})}" method="post">
+    <form th:action="@{/comment/delete(postId=${postEntity.id},commentId=${comment.id})}" method="post">
         <input class="delete-button" type="submit" value="Delete">
     </form>
 </div>

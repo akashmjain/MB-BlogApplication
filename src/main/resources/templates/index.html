@@ -74,18 +74,28 @@
             background-color: grey;
             margin: 2%;
         }
+        .create-blog-link {
+            border: solid blue;
+            color: white;
+            background-color: blue;
+            text-decoration: none;
+            font-weight: 2em;
+            font-size: 1.2em;
+            padding: 1%;
+        }
     </style>
 </head>
 <body>
 <h1>Blog Application</h1>
-
+<!-- Create new Post button -->
+<a class="create-blog-link" th:href="@{post/create}">Create new Post</a>
 <!-- Here you need button or page as a button-->
 <div class="next-page-div">
     <a th:each="i: ${#numbers.sequence(0, totalPages - 1)}" class="next-page-button" th:text="${i+1}" th:href="@{/(page=${i})}"></a>
 </div>
 
 <div th:each="post: ${posts}" class="blog">
-    <a th:href="@{blog(id=${post.id})}" class="blog-title" th:text="${post.title}"></a>
+    <a th:href="@{post/read(postId=${post.id})}" class="blog-title" th:text="${post.title}"></a>
     <p class="blog-excerpt" th:text="${post.excerpt}"></p>
     <span class="blog-info">
                 <a class="author-name" href="#" th:text="${post.author.name}"></a>

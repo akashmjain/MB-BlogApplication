@@ -114,11 +114,11 @@ public class PostEntity {
         this.publishedAt = publishedAt;
     }
 
-    public boolean isPublished() {
+    public boolean getIsPublished() {
         return isPublished;
     }
 
-    public void setPublished(boolean published) {
+    public void setIsPublished(boolean published) {
         isPublished = published;
     }
 
@@ -153,5 +153,4 @@ public class PostEntity {
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }
-
 }

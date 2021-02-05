@@ -56,7 +56,17 @@
 <body>
 <div class="main">
     <h1>Create/Update Blog</h1>
-    <form th:object="${postEntity}" class="create-form" action="#" th:action="@{create/save}" method="post">
+    <form th:object="${postEntity}" class="create-form" action="#" th:action="@{update/save}" method="post">
+
+        <input  th:field="*{id}" type="hidden">
+        <input  th:field="*{excerpt}" type="hidden">
+        <input  th:field="*{author}" type="hidden">
+        <input  th:field="*{publishedAt}" type="hidden">
+        <input  th:field="*{isPublished}" type="hidden">
+        <input  th:field="*{createdAt}" type="hidden">
+        <input  th:field="*{updatedAt}" type="hidden">
+
+
         <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
         <input th:value="${tagStringData}" name="tag_string_data" class="text-input" type="text" placeholder="ags put in this format(ex. #tag1 #tag2 )">
         <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>

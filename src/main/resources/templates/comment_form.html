@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Josefin Slab', serif;
+            background: #0B0B0B;
+            color: white;
+            font-weight: bolder;
+            font-size: 1.5em;
+            margin-left: 10%;
+            margin-right: 10%;
+        }
+        a {
+            text-decoration: none;
+        }
+        h1 {
+            font-size: 2.0em;
+            text-align: center;
+        }
+
+        .text-input {
+            font-size: 1.5rem;
+            padding: 0.5%;
+            margin: 0.5%;
+            background-color: #0B0B0B;
+            color: white;
+            width: 70%;
+
+        }
+        .comment-form{
+            display: flex;
+            flex-direction: column;
+
+            align-items: center;
+            margin: 2%;
+        }
+        .submit-btn {
+            padding: 1%;
+            text-align: center;
+            font-size: 2.0rem;
+            cursor: pointer;
+            background-color: transparent;
+            color: rgb(214, 202, 202);
+            border: solid grey;
+            border-radius: 2%;
+        }
+        .submit-btn:hover {
+            border-color: tomato;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <form action="#" th:action="@{/comment/save(postId=${postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+            <input th:field="*{name}" name="full_name" class ="text-input" type="text" placeholder="Full Name">
+            <input th:field="*{email}" name="email" class="text-input" type="email" placeholder="email">
+            <textarea th:field="*{comment}" name="comment" rows="5" class="text-input" placeholder="comment"></textarea>
+            <input class="submit-btn" type="submit" value="SUBMIT">
+        </form>
+    </div>
+
+</body>
+</html>

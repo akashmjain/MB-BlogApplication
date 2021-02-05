@@ -82,10 +82,7 @@ public class PostController {
 
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity) {
-        PostEntity par = postService.findById(postEntity.getId());
-        par.setTitle(postEntity.getTitle());
-        par.setContent(postEntity.getContent());
-        postService.save(par);
+        postService.save(postEntity);
         return "redirect:/post/read?postId="+postEntity.getId();
     }
 }

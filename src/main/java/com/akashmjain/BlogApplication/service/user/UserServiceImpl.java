@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,6 +44,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteById(int theId) {
         userRepository.deleteById(theId);
+    }
+
+    @Override
+    public List<PostEntity> getPostsByUserIdList(List<Integer> userIds) {
+        List<PostEntity> postEntities = new ArrayList<>();
+        for (int id : userIds) {
+            postEntities.addAll(this.findById(id).getPosts());
+        }
+        return postEntities;
     }
 
 

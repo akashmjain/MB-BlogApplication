@@ -1,6 +1,7 @@
 package com.akashmjain.BlogApplication.service.tag;
 
 import com.akashmjain.BlogApplication.dao.TagRepository;
+import com.akashmjain.BlogApplication.enitity.PostEntity;
 import com.akashmjain.BlogApplication.enitity.TagEntity;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,7 +26,7 @@ public class TagServiceImpl implements TagService {
     public TagEntity findById(int theId) {
         Optional<TagEntity> optional = tagRepository.findById(theId);
         TagEntity tagEntity = null;
-        if(optional.isPresent()) {
+        if (optional.isPresent()) {
             tagEntity = optional.get();
         } else {
             //TODO: Here change this with exception later
@@ -50,7 +51,7 @@ public class TagServiceImpl implements TagService {
         String[] tagNameArr = tagSting.toLowerCase(Locale.ROOT).replaceAll("\\s","").split(",");
         for (String tagName : tagNameArr) {
             TagEntity tagEntity = tagRepository.findByName(tagName);
-            if(tagEntity == null) {
+            if (tagEntity == null) {
                 tagEntity = new TagEntity();
                 tagEntity.setName(tagName);
                 tagEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -60,5 +61,24 @@ public class TagServiceImpl implements TagService {
             tagList.add(tagEntity);
         }
         return tagList;
+    }
+
+    @Override
+    public List<PostEntity> getPostsByTagIdList(List<Integer> tagIds, List<PostEntity> postEntities) {
+        List<PostEntity> posts = new ArrayList<>();
+        if (postEntities == null) {
+            for (int tagId : tagIds) {
+                posts.addAll(this.findById(tagId).getPosts());
+            }
+        } else {
+            for (PostEntity postEntity : postEntities) {
+                for (int tagId : tagIds) {
+                    if (postEntity.getTags().contains(this.findById(tagId))) {
+                        posts.add(postEntity);
+                    }
+                }
+            }
+        }
+        return posts;
     }
 }

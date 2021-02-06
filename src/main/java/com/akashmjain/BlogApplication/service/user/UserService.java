@@ -16,4 +16,6 @@ public interface UserService {
 
     public void deleteById(int theId);
 
+    public List<PostEntity> getPostsByUserIdList(List<Integer> userIds);
+
 }

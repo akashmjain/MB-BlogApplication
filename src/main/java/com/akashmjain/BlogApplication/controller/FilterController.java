@@ -28,27 +28,35 @@ public class FilterController {
     private PostService postService;
 
     @RequestMapping("/filter")
-    public String getFilteredData(@RequestParam(value = "tagId", required = false) List<Integer> tagIds, @RequestParam(value = "authorId", required = false) List<Integer> authorIds,Model model) {
-        List<PostEntity> posts = null;
-        System.out.println("LOG :: AUTHOR ID " + authorIds);
-        System.out.println("LOG :: TAG ID " + tagIds);
-        if(authorIds != null) posts = userService.getPostsByUserIdList(authorIds);
-        if(tagIds != null) posts = tagService.getPostsByTagIdList(tagIds, posts);
-        System.out.println("LOG :: POSTS " + posts);
+    public String getFilteredData(@RequestParam(value = "search", required = false) String search,
+                                  @RequestParam(value = "tagId", required = false) List<Integer> tagIds,
+                                  @RequestParam(value = "authorId", required = false) List<Integer> authorIds,
+                                  @RequestParam(value = "order", required = false, defaultValue = "asc") String sortOrder,
+                                  Model model) {
+        System.out.println(sortOrder);
+        List<PostEntity> posts = new ArrayList<>();
+        if (search != null) posts = getSearchResult(search);
+        if (authorIds != null) posts = userService.getPostsByUserIdList(authorIds);
+        if (tagIds != null) posts = tagService.getPostsByTagIdList(tagIds, posts);
+        Set<PostEntity> set = new LinkedHashSet<>(posts);
+        posts.clear();
+        posts.addAll(set);
+        posts.sort(new Comparator<PostEntity>() {
+            @Override
+            public int compare(PostEntity o2, PostEntity o1) {
+                return o1.getUpdatedAt().compareTo(o2.getUpdatedAt());
+            }
+        });
         model.addAttribute("data", posts);
         return "test";
     }
-    @RequestMapping("/query")
-    public String getQueryData(@RequestParam("search") String search,Model model) {
+
+    private List<PostEntity> getSearchResult(String search) {
         List<PostEntity> postEntities = new ArrayList<>();
         postEntities.addAll(postService.getPostsBySearchString(search));
         postEntities.addAll(userService.getPostsByUserName(search));
         postEntities.addAll(tagService.getPostsByTagName(search));
-        Set<PostEntity> set = new LinkedHashSet<>(postEntities);
-        postEntities.clear();
-        postEntities.addAll(set);
-        System.out.println("DATA :- " + postEntities);
-        model.addAttribute("data", postEntities);
-        return "test";
+
+        return postEntities;
     }
 }

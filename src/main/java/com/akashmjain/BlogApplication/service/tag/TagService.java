@@ -17,4 +17,6 @@ public interface TagService {
     public List<TagEntity> stringToTag(String tagSting);
 
     public List<PostEntity> getPostsByTagIdList(List<Integer> tagIds, List<PostEntity> postEntities);
+
+    public List<PostEntity> getPostsByTagName(String query);
 }

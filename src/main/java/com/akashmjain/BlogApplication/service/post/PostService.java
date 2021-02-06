@@ -16,4 +16,6 @@ public interface PostService {
     public void save(PostEntity postEntity);
 
     public void deleteById(int theId);
+
+    public List<PostEntity> getPostsBySearchString(String query);
 }

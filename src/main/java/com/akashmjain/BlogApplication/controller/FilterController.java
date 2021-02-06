@@ -4,6 +4,7 @@ import com.akashmjain.BlogApplication.dao.UserRepository;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
 import com.akashmjain.BlogApplication.enitity.TagEntity;
 import com.akashmjain.BlogApplication.enitity.UserEntity;
+import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.dom4j.rule.Mode;
@@ -15,9 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class FilterController {
@@ -25,6 +24,8 @@ public class FilterController {
     private UserService userService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private PostService postService;
 
     @RequestMapping("/filter")
     public String getFilteredData(@RequestParam(value = "tagId", required = false) List<Integer> tagIds, @RequestParam(value = "authorId", required = false) List<Integer> authorIds,Model model) {
@@ -37,17 +38,17 @@ public class FilterController {
         model.addAttribute("data", posts);
         return "test";
     }
-
-//    @RequestMapping(value = "/filter", params = "tagId")
-//    public String getPostByTags(@RequestParam("tagId")int tagId, @RequestParam(name = "page", required = false, defaultValue = "0") int pageNo, Model model) {
-//        Pageable pageable = PageRequest.of(pageNo, 3);
-//        TagEntity tagEntity = tagService.findById(tagId);
-//        Long start = pageable.getOffset();
-//        Long end =(start + pageable.getPageSize()) > tagEntity.getPosts().size() ? tagEntity.getPosts().size() : (start + pageable.getPageSize());
-//        Page<PostEntity> pages = new PageImpl<PostEntity>(tagEntity.getPosts().subList(start.intValue(), end.intValue()), pageable, tagEntity.getPosts().size());
-//        model.addAttribute("totalPages",pages.getTotalPages());
-//        model.addAttribute("posts", pages.getContent());
-//        model.addAttribute("pathTo", "/filter?tagId="+tagId);
-//        return "index";
-//    }
+    @RequestMapping("/query")
+    public String getQueryData(@RequestParam("search") String search,Model model) {
+        List<PostEntity> postEntities = new ArrayList<>();
+        postEntities.addAll(postService.getPostsBySearchString(search));
+        postEntities.addAll(userService.getPostsByUserName(search));
+        postEntities.addAll(tagService.getPostsByTagName(search));
+        Set<PostEntity> set = new LinkedHashSet<>(postEntities);
+        postEntities.clear();
+        postEntities.addAll(set);
+        System.out.println("DATA :- " + postEntities);
+        model.addAttribute("data", postEntities);
+        return "test";
+    }
 }

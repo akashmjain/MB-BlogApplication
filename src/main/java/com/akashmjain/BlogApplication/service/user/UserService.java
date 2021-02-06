@@ -18,4 +18,6 @@ public interface UserService {
 
     public List<PostEntity> getPostsByUserIdList(List<Integer> userIds);
 
+    public List<PostEntity> getPostsByUserName(String query);
+
 }

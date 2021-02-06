@@ -76,10 +76,19 @@ public class TagServiceImpl implements TagService {
                 }
             }
         }
-        // to clear any duplicates
         Set<PostEntity> set = new LinkedHashSet<>(posts);
         posts.clear();
         posts.addAll(set);
         return posts;
+    }
+
+    @Override
+    public List<PostEntity> getPostsByTagName(String query) {
+        List<PostEntity> postEntities = new ArrayList<>();
+        List<TagEntity> tags =  tagRepository.findByNameContaining(query);
+        for (TagEntity tag : tags) {
+            postEntities.addAll(tag.getPosts());
+        }
+        return postEntities;
     }
 }

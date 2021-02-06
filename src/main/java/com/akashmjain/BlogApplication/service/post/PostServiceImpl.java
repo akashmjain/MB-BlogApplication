@@ -2,19 +2,21 @@ package com.akashmjain.BlogApplication.service.post;
 
 import com.akashmjain.BlogApplication.dao.PostRepository;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class PostServiceImpl implements PostService{
     @Autowired
     private PostRepository postRepository;
+    @Autowired
+    private UserService userService;
 
     @Override
     public List<PostEntity> findAll() {
@@ -48,5 +50,19 @@ public class PostServiceImpl implements PostService{
     @Override
     public void deleteById(int theId) {
         postRepository.deleteById(theId);
+    }
+
+    @Override
+    public List<PostEntity> getPostsBySearchString(String query) {
+        List<PostEntity> posts = new ArrayList<>();
+
+        // get from title
+        posts.addAll(postRepository.findByTitleContaining(query));
+        // get from content
+        posts.addAll(postRepository.findByContentContaining(query));
+        // get from excerpt
+        posts.addAll(postRepository.findByContentContaining(query));
+
+        return posts;
     }
 }

@@ -37,7 +37,7 @@ public class PostController {
     }
 
     /* READ SECTION */
-    @RequestMapping("/")
+    @RequestMapping("/post/list")
     public String readPostInPage(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNo, @RequestParam(name = "limit", required = false, defaultValue = "5") int limit,Model model) {
         Pageable page = PageRequest.of(pageNo, limit);
         Page<PostEntity> pageWithPosts = postService.findPages(page);

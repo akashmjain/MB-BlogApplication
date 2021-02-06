@@ -2,6 +2,7 @@ package com.akashmjain.BlogApplication.controller;
 
 import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.enitity.TagEntity;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Controller
 public class PostController {
@@ -30,6 +32,7 @@ public class PostController {
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();
         model.addAttribute("postEntity", postEntity);
+        model.addAttribute("tagStringData", "");
         return "write_blog";
     }
 
@@ -66,9 +69,10 @@ public class PostController {
 
     /* Calling */
     @RequestMapping("/post/create/save")
-    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity) {
+    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity, @RequestParam("tag_string_data") String tagString) {
+        postEntity.setTags(tagService.stringToTag(tagString));
         postEntity.setAuthor(userService.findById(1));
-        postEntity.setExcerpt("something to show");
+        postEntity.setExcerpt("Some hardcoded excerpt to show");
         postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));

@@ -12,4 +12,6 @@ public interface TagService {
     public void save(TagEntity tagEntity);
 
     public void deleteById(int theId);
+
+    public List<TagEntity> stringToTag(String tagSting);
 }

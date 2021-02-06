@@ -91,7 +91,7 @@
 <a class="create-blog-link" th:href="@{post/create}">Create new Post</a>
 <!-- Here you need button or page as a button-->
 <div class="next-page-div">
-    <a th:each="i: ${#numbers.sequence(0, totalPages - 1)}" class="next-page-button" th:text="${i+1}" th:href="@{/(page=${i})}"></a>
+    <a th:each="i: ${#numbers.sequence(0, totalPages - 1)}" class="next-page-button" th:text="${i+1}" th:href="@{${pathTo}(page=${i})}"></a>
 </div>
 
 <div th:each="post: ${posts}" class="blog">

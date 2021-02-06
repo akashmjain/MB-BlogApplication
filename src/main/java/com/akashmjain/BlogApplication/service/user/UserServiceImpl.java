@@ -1,8 +1,13 @@
 package com.akashmjain.BlogApplication.service.user;
 
 import com.akashmjain.BlogApplication.dao.UserRepository;
+import com.akashmjain.BlogApplication.enitity.PostEntity;
 import com.akashmjain.BlogApplication.enitity.UserEntity;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.support.PagedListHolder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,4 +44,6 @@ public class UserServiceImpl implements UserService {
     public void deleteById(int theId) {
         userRepository.deleteById(theId);
     }
+
+
 }

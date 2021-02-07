@@ -83,12 +83,63 @@
             font-size: 1.2em;
             padding: 1%;
         }
+        .searching-form {
+            margin: 2%;
+            padding: 2%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            border: solid;
+        }
     </style>
 </head>
 <body>
 <h1>Blog Application</h1>
 <!-- Create new Post button -->
 <a class="create-blog-link" th:href="@{post/create}">Create new Post</a>
+<!-- Filter Div -->
+<form action="" class="searching-form">
+    <!-- Search Bar -->
+    <input type="text" name="search" id="search">
+    <!-- Timestamp Sorting -->
+    <div class="timestamp-sorting">
+        <p>Select Sort order</p>
+        <div>
+            <input type="radio" id="asc" name="order" value="asc" checked>
+            <label for="asc">Asc</label>
+        </div>
+        <div>
+            <input type="radio" id="dsc" name="order" value="dsc">
+            <label for="dsc">Dsc</label>
+        </div>
+    </div>
+    <!-- Tag MultiSelect Filtering -->
+    <div>
+        <p>Select Tags</p>
+        <select multiple name="tagId" id="tags-multi">
+            <option th:each="tag : ${allTags}" th:value="${tag.id}" th:text="${tag.name}"></option>
+        </select>
+    </div>
+    <!-- User MultiSelect Filtering -->
+    <div>
+        <p>Select Users</p>
+        <select multiple name="authorId" id="users-multi">
+            <option th:each="user : ${allUsers}" th:value="${user.id}" th:text="${user.name}"></option>
+        </select>
+    </div>
+    <!-- Date start and end -->
+    <div>
+        <label for="startDate">Start date:</label>
+        <input type="date" id="startDate" name="start_date">
+    </div>
+    <div>
+        <label for="endDate">End date:</label>
+        <input type="date" id="endDate" name="end_date">
+    </div>
+    <!-- Submit button -->
+    <input type="submit" value="Search">
+</form>
 <!-- Here you need button or page as a button-->
 <div class="next-page-div">
     <a th:each="i: ${#numbers.sequence(0, totalPages-1 < 0 ? 0 : totalPages-1)}" class="next-page-button" th:text="${i+1}" th:href="@{${pathTo}(page=${i})}"></a>

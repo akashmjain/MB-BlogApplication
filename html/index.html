@@ -83,6 +83,16 @@
             font-size: 1.2em;
             padding: 1%;
         }
+        .searching-form {
+            margin: 2%;
+            padding: 2%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: white;
+            border: solid;
+        }
+        
     </style>
 </head>
 <body>
@@ -91,6 +101,53 @@
     <!--  -->
     <a class="create-blog-link" href="#">Create new Blog</a>
 
+    <!-- Filter Div -->
+    <form action="" class="searching-form">
+        <!-- Search Bar -->
+        <input type="text" name="search" id="search">
+        <!-- Timestamp Sorting -->
+        <div class="timestamp-sorting">
+            <p>Select Sort order</p>
+            <div>
+                <input type="radio" id="huey" name="sort" value="asc" checked>
+                <label for="huey">Asc</label>
+            </div>
+            <div>
+                <input type="radio" id="dewey" name="sort" value="dsc">
+                <label for="dewey">Dsc</label>
+            </div>
+        </div>
+        <!-- Tag MultiSelect Filtering -->
+        <div>
+            <p>Select Tags</p>
+            <select multiple name="tagId" id="tags-multi">
+                <option value="1">tag 1</option>
+                <option value="2">tag 2</option>
+            </select>
+        </div>
+        <!-- User MultiSelect Filtering -->
+        <div>
+            <p>Select Users</p>
+            <select multiple name="userId" id="users-multi">
+                <option value="1">user 1</option>
+                <option value="2">user 2</option>
+            </select>
+        </div>
+        <!-- Date start and end -->
+        <div>
+            <label for="start">Start date:</label>
+            <input type="date" id="start" name="start_date">
+        </div>
+        <div>
+            <label for="start">End date:</label>
+            <input type="date" id="start" name="end_date">
+        </div>
+        <!-- Submit button -->
+        <input type="submit" value="Search">
+    </form>
+    
+
+    
     <div class="blog">
         <a href="#" class="blog-title" >Lorem ipsum dolor sit amet.</a>
         <p class="blog-excerpt">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Amet non eaque maxime saepe nesciunt et. Possimus similique vitae optio assumenda architecto porro in eligendi, nulla quos asperiores voluptates sit laudantium.</p>

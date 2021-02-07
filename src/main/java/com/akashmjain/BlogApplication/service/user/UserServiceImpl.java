@@ -57,7 +57,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PostEntity> getPostsByUserName(String query) {
-        UserEntity userEntities = userRepository.findByNameContaining(query);
-        return userEntities.getPosts();
+        List<UserEntity> userEntities = userRepository.findByNameContaining(query);
+        List<PostEntity> postEntities = new ArrayList<>();
+        for (UserEntity user : userEntities) {
+            postEntities.addAll(user.getPosts());
+        }
+        return postEntities;
     }
 }

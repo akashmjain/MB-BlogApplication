@@ -1,7 +1,7 @@
 -- User with relations included
 
 -- CLEAN UP
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
 DROP SEQUENCE IF EXISTS users_seq;
 
 -- NEW CREATIONS

@@ -1,6 +1,6 @@
 -- Tags with relations included
 
-DROP TABLE IF EXISTS post_tags;
+DROP TABLE IF EXISTS post_tags CASCADE;
 
 CREATE TABLE post_tags (
   post_id int NOT NULL,
@@ -10,12 +10,12 @@ CREATE TABLE post_tags (
   PRIMARY KEY (post_id, tag_id),
 
 
-  CONSTRAINT FK_POST FOREIGN KEY (post_id) 
-  REFERENCES posts (id) 
+  CONSTRAINT FK_POST FOREIGN KEY (post_id)
+  REFERENCES posts (id)
   ON DELETE NO ACTION ON UPDATE NO ACTION,
-  
-  CONSTRAINT FK_TAG FOREIGN KEY (tag_id) 
-  REFERENCES tags (id) 
+
+  CONSTRAINT FK_TAG FOREIGN KEY (tag_id)
+  REFERENCES tags (id)
   ON DELETE NO ACTION ON UPDATE NO ACTION
 );
 

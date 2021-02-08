@@ -1,6 +1,6 @@
 -- User with relations included
 
-DROP TABLE IF EXISTS posts;
+DROP TABLE IF EXISTS posts CASCADE;
 
 CREATE SEQUENCE posts_seq;
 

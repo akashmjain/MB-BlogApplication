@@ -19,6 +19,7 @@ import java.sql.Timestamp;
 import java.util.List;
 
 @Controller
+
 public class PostController {
     @Autowired
     private PostService postService;

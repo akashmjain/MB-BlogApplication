@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -30,14 +29,15 @@ public class FilterController {
     private PostService postService;
 
     private String urlData;
+
     @RequestMapping("/")
     public String getFilteredData(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                   @RequestParam(value = "search", required = false) String search,
                                   @RequestParam(value = "tagId", required = false) List<Integer> tagIds,
                                   @RequestParam(value = "authorId", required = false) List<Integer> authorIds,
                                   @RequestParam(value = "order", required = false, defaultValue = "asc") String sortOrder,
-                                  @RequestParam(value = "startDate", required = false, defaultValue = "asc") String startDate,
-                                  @RequestParam(value = "endDate", required = false, defaultValue = "asc") String endDate,
+                                  @RequestParam(value = "startDate", required = false) String startDate,
+                                  @RequestParam(value = "endDate", required = false) String endDate,
                                   Model model) {
         urlData = "?";
         List<PostEntity> posts;
@@ -68,6 +68,7 @@ public class FilterController {
     }
 
     private List<PostEntity> getSortedPostEntityList(List<PostEntity> posts, String sortOrder) {
+        if(posts == null) return null;
         List<PostEntity> modifiableList = new ArrayList<PostEntity>(posts);
         if (sortOrder.toLowerCase(Locale.ROOT).equals("dsc"))
             modifiableList.sort((o2, o1) -> o1.getPublishedAt().compareTo(o2.getPublishedAt()));
@@ -101,20 +102,24 @@ public class FilterController {
     }
 
     private List<PostEntity> getPostFilteredByDate(String startDateString, String endDateString, List<PostEntity> posts) {
-        if (posts.isEmpty()) return null;
+        ArrayList<PostEntity> filteredPosts = new ArrayList<>();
+        if (posts == null) return null;
         try {
             Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(startDateString);
             Date endDate = new SimpleDateFormat("yyyy-MM-dd").parse(endDateString);
             for (PostEntity post : posts) {
                 Date postDate = new Date(post.getPublishedAt().getTime());
-                if (postDate.getTime() < startDate.getTime() || postDate.getTime() > endDate.getTime()) {
-                    posts.remove(post);
+                if (postDate.getTime() >= startDate.getTime() && postDate.getTime() <= endDate.getTime()) {
+                    filteredPosts.add(post);
                 }
             }
         } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(posts);
             return posts;
         }
-        return posts;
+        System.out.println(filteredPosts);
+        return filteredPosts;
     }
 
     private Page<PostEntity> getPaginatedData(List<PostEntity> posts, int pageNo, int size) {

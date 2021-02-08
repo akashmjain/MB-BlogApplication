@@ -1,6 +1,6 @@
 -- Tags with relations included
 
-DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS tags CASCADE;
 DROP SEQUENCE IF EXISTS tags_seq;
 
 CREATE SEQUENCE tags_seq;

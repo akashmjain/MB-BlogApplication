@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface UserRepository extends JpaRepository<UserEntity, Integer> {
     public List<UserEntity> findByNameContaining (String title);
+
+    public UserEntity findByName (String name);
 }

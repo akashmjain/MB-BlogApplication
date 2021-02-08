@@ -76,9 +76,6 @@ public class TagServiceImpl implements TagService {
                 }
             }
         }
-        Set<PostEntity> set = new LinkedHashSet<>(posts);
-        posts.clear();
-        posts.addAll(set);
         return posts;
     }
 

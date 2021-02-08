@@ -16,7 +16,7 @@ public interface UserService {
 
     public void deleteById(int theId);
 
-    public List<PostEntity> getPostsByUserIdList(List<Integer> userIds);
+    public List<PostEntity> getPostsByUserIdList(List<Integer> userIds, List<PostEntity> posts);
 
     public List<PostEntity> getPostsByUserName(String query);
 

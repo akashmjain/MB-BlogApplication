@@ -47,10 +47,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<PostEntity> getPostsByUserIdList(List<Integer> userIds) {
-        List<PostEntity> postEntities = new ArrayList<>();
-        for (int id : userIds) {
-            postEntities.addAll(this.findById(id).getPosts());
+    public List<PostEntity> getPostsByUserIdList(List<Integer> authorIds, List<PostEntity> postEntities) {
+        if (postEntities != null)
+            postEntities.removeIf(post -> !authorIds.contains(post.getAuthor().getId()));
+        else {
+            for (int id : authorIds) {
+                postEntities.addAll(this.findById(id).getPosts());
+            }
         }
         return postEntities;
     }

@@ -1,6 +1,8 @@
 package com.akashmjain.BlogApplication.controller;
 
+import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
@@ -9,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
@@ -18,17 +19,21 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
-public class FilterController {
+public class AnonymousController {
     @Autowired
     private UserService userService;
     @Autowired
     private TagService tagService;
     @Autowired
     private PostService postService;
+    @Autowired
+    private CommentService commentService;
+
 
     private String urlData;
 
@@ -76,6 +81,25 @@ public class FilterController {
         }
         System.out.println(gr);
         return "show_blog";
+    }
+
+    @RequestMapping("/comment/create")
+    public String createComment(@RequestParam("postId") int postId, Model model) {
+        PostEntity postEntity = postService.findById(postId);
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+        commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        commentEntity.setPostEntity(postEntity);
+        commentEntity.setId(0);
+        model.addAttribute("commentEntity", commentEntity);
+        return "comment_form";
+    }
+
+    @RequestMapping("/comment/save")
+    public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
+        commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        commentService.save(commentEntity);
+        return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
     }
 
     private List<PostEntity> getUniquePostEntityList(List<PostEntity> posts) {

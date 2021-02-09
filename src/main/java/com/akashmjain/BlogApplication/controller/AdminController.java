@@ -1,6 +1,8 @@
 package com.akashmjain.BlogApplication.controller;
 
+import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
@@ -19,13 +21,15 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
-public class AdminPostController {
+public class AdminController {
     @Autowired
     private PostService postService;
     @Autowired
     private UserService userService;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private CommentService commentService;
 
     private final int EXCERPT_SIZE = 100;
 
@@ -80,7 +84,22 @@ public class AdminPostController {
         }
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postService.save(postEntity);
-        return "redirect:/admin/post/read?postId="+postEntity.getId();
+        return "redirect:/post/read?postId="+postEntity.getId();
+    }
+
+    /* UPDATE COMMENT */
+    @RequestMapping("/comment/update")
+    public String updateComment(@RequestParam("commentId") int commentId,Model model) {
+        CommentEntity commentEntity = commentService.findById(commentId);
+        model.addAttribute("commentEntity", commentEntity);
+        return "comment_form";
+    }
+
+    /* DELETE COMMENT */
+    @RequestMapping("/comment/delete")
+    public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
+        commentService.deleteById(commentId);
+        return "redirect:/post/read?postId=" + postId;
     }
 }
 

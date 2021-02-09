@@ -146,7 +146,7 @@
 </ul>
 </div>
 <!--Comment submit section-->
-<a class="ablog-author" th:href="@{/admin/comment/create(postId=${postEntity.id})}">Create new Comment</a>
+<a class="blog-author" th:href="@{/comment/create(postId=${postEntity.id})}">Create new Comment</a>
 
 <!--Comment section-->
 <div th:each="comment: ${postEntity.comments}" class="comment">
@@ -157,9 +157,11 @@
         <p class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </p>
         <p class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></p>
     </div>
-    <div sec:authorize="hasRole('ROLE_ADMIN')">
-        <a class="delete-button" th:href="@{/admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
-        <a class="delete-button" th:href="@{/admin/comment/update(commentId=${comment.id})}">Update</a>
+    <div sec:authorize="isAuthenticated()">
+        <div th:if="${#authentication.name} == ${postEntity.author.name} or ${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+            <a class="delete-button" th:href="@{/admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
+            <a class="delete-button" th:href="@{/admin/comment/update(commentId=${comment.id})}">Update</a>
+        </div>
     </div>
 </div>
 </body>

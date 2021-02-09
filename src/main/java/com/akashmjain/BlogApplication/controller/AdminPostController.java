@@ -5,12 +5,17 @@ import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
+import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -38,6 +43,16 @@ public class AdminPostController {
     @RequestMapping("/post/read")
     public String readPost(@RequestParam("postId") int postId, Model model) {
         model.addAttribute("postEntity", postService.findById(postId));
+        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        Collection<?> gr = null;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+            gr = ((UserDetails) principal).getAuthorities();
+        } else {
+            username = principal.toString();
+        }
+        System.out.println(gr);
         return "show_blog";
     }
 

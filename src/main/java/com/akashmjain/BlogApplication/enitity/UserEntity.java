@@ -1,5 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import org.springframework.data.annotation.ReadOnlyProperty;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,10 +22,15 @@ public class UserEntity {
     @Column(name = "password")
     private String password;
 
+    @Column(name = "roles")
+    @ReadOnlyProperty
+    private String roles;
+
     @OneToMany(mappedBy = "author",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
     private List<PostEntity> posts;
+
 
     public UserEntity() {}
 
@@ -75,5 +82,12 @@ public class UserEntity {
         this.posts = posts;
     }
 
+    public String getRoles() {
+        return roles;
+    }
+
+    public void setRoles(String roles) {
+        this.roles = roles;
+    }
 }
 

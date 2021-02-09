@@ -45,6 +45,7 @@ public class AdminPostController {
     public String updatePost(@RequestParam("postId") int postId, Model model) {
         PostEntity postEntity = postService.findById(postId);
         model.addAttribute("postEntity", postEntity);
+        model.addAttribute("users", userService.findAll());
         return "update_blog";
     }
 
@@ -73,7 +74,10 @@ public class AdminPostController {
     }
 
     @RequestMapping("/post/update/save")
-    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity) {
+    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,@RequestParam(value = "authorId", required = false, defaultValue = "-1") int authorId) {
+        if(authorId > 0) {
+            postEntity.setAuthor(userService.findById(authorId));
+        }
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postService.save(postEntity);
         return "redirect:/admin/post/read?postId="+postEntity.getId();

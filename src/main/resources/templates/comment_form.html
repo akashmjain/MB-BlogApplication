@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Comment Form</title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
     <style>
         body {
@@ -52,10 +53,26 @@
             border-color: tomato;
         }
     </style>
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    function validateForm() {
+      let name = document.forms["comment_form"]["full_name"].value;
+      let email = document.forms["comment_form"]["email"].value;
+      let comment = document.forms["comment_form"]["comment"].value;
+      if ((name == "" || name == null) && (email == "" || email == null) && (comment == "" || comment == null)) {
+        alert("Name must be filled out");
+        return false;
+      }
+    }
+    console.log("Hello World");
+    /*]]>*/
+    </script>
+
 </head>
 <body>
     <div>
-        <form action="#" th:action="@{/admin/comment/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+        <form name="comment_form" th:onsubmit="return validateForm()" th:action="@{/admin/comment/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
             <input th:field="*{id}" type="hidden">
             <input th:field="*{postEntity}" type="hidden">
             <input th:field="*{createdAt}" type="hidden">

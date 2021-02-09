@@ -10,6 +10,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -58,6 +60,22 @@ public class FilterController {
         model.addAttribute("allUsers", userService.findAll());
         model.addAttribute("allTags", tagService.findAll());
         return "index";
+    }
+
+    @RequestMapping("/post/read")
+    public String readPost(@RequestParam("postId") int postId, Model model) {
+        model.addAttribute("postEntity", postService.findById(postId));
+        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username;
+        Collection<?> gr = null;
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername();
+            gr = ((UserDetails) principal).getAuthorities();
+        } else {
+            username = principal.toString();
+        }
+        System.out.println(gr);
+        return "show_blog";
     }
 
     private List<PostEntity> getUniquePostEntityList(List<PostEntity> posts) {

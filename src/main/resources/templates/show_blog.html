@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Blog </title>
     <link href="https://fonts.googleapis.com/css2?family=Josefin+Slab:wght@300&amp;display=swap" rel="stylesheet">
     <style>
         body {
@@ -130,11 +131,11 @@
 <a href="#" class="blog-author" th:text="${postEntity.author.name}"></a>
 <p class="blog-timestamp" th:text="${postEntity.publishedAt}">published date and time</p>
 <!-- Delete and Update section (here change inputs to anchor tags latter)-->
-<div class="edit-group">
-    <form th:action="@{./update(postId=${postEntity.id})}" method="post">
+<div class="edit-group" sec:authorize="hasRole('ROLE_ADMIN')">
+    <form th:action="@{/admin/post/update(postId=${postEntity.id})}" method="post">
         <input class="post-update-btn" type="submit" value="Update">
     </form>
-    <form th:action="@{./delete(postId=${postEntity.id})}" action="" method="post">
+    <form th:action="@{/admin/post/delete(postId=${postEntity.id})}" action="" method="post">
         <input class="post-delete-btn" type="submit" value="Delete">
     </form>
 </div>
@@ -156,8 +157,10 @@
         <p class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </p>
         <p class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></p>
     </div>
-    <a class="delete-button" th:href="@{admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
-    <a class="delete-button" th:href="@{admin/comment/update(commentId=${comment.id})}">Update</a>
+    <div sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="delete-button" th:href="@{/admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
+        <a class="delete-button" th:href="@{/admin/comment/update(commentId=${comment.id})}">Update</a>
+    </div>
 </div>
 </body>
 </html>

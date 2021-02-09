@@ -47,7 +47,7 @@ public class AdminCommentController {
     @RequestMapping("/comment/delete")
     public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
         commentService.deleteById(commentId);
-        return "redirect:/post/read?postId=" + postId;
+        return "redirect:/admin/post/read?postId=" + postId;
     }
 
 
@@ -56,6 +56,6 @@ public class AdminCommentController {
     public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         commentService.save(commentEntity);
-        return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
+        return "redirect:/admin/post/read?postId=" + commentEntity.getPostEntity().getId();
     }
 }

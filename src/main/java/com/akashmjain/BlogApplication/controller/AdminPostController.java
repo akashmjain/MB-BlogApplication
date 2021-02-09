@@ -39,22 +39,6 @@ public class AdminPostController {
         return "write_blog";
     }
 
-    /* READ SINGLE POST */
-    @RequestMapping("/post/read")
-    public String readPost(@RequestParam("postId") int postId, Model model) {
-        model.addAttribute("postEntity", postService.findById(postId));
-        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        Collection<?> gr = null;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-            gr = ((UserDetails) principal).getAuthorities();
-        } else {
-            username = principal.toString();
-        }
-        System.out.println(gr);
-        return "show_blog";
-    }
 
     /* UPDATE SECTION */
     @RequestMapping("/post/update")

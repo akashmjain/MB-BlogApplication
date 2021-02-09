@@ -131,10 +131,10 @@
 <p class="blog-timestamp" th:text="${postEntity.publishedAt}">published date and time</p>
 <!-- Delete and Update section (here change inputs to anchor tags latter)-->
 <div class="edit-group">
-    <form th:action="@{/post/update(postId=${postEntity.id})}" method="post">
+    <form th:action="@{./update(postId=${postEntity.id})}" method="post">
         <input class="post-update-btn" type="submit" value="Update">
     </form>
-    <form th:action="@{/post/delete(postId=${postEntity.id})}" action="" method="post">
+    <form th:action="@{./delete(postId=${postEntity.id})}" action="" method="post">
         <input class="post-delete-btn" type="submit" value="Delete">
     </form>
 </div>
@@ -145,7 +145,7 @@
 </ul>
 </div>
 <!--Comment submit section-->
-<a class="ablog-author" th:href="@{/comment/create(postId=${postEntity.id})}">Create new Comment</a>
+<a class="ablog-author" th:href="@{/admin/comment/create(postId=${postEntity.id})}">Create new Comment</a>
 
 <!--Comment section-->
 <div th:each="comment: ${postEntity.comments}" class="comment">
@@ -156,8 +156,8 @@
         <p class="comment-timestamp" th:text="'Created At : ' + ${comment.createdAt}"> </p>
         <p class="comment-timestamp" th:text="'Updated At : ' + ${comment.updatedAt}"></p>
     </div>
-    <a class="delete-button" th:href="@{/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
-    <a class="delete-button" th:href="@{/comment/update(commentId=${comment.id})}">Update</a>
+    <a class="delete-button" th:href="@{admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
+    <a class="delete-button" th:href="@{admin/comment/update(commentId=${comment.id})}">Update</a>
 </div>
 </body>
 </html>

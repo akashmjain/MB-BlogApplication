@@ -1,26 +1,20 @@
 package com.akashmjain.BlogApplication.controller;
 
-import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
-import com.akashmjain.BlogApplication.enitity.TagEntity;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
-import java.util.List;
 
 @Controller
-
-public class PostController {
+@RequestMapping("/admin")
+public class AdminPostController {
     @Autowired
     private PostService postService;
     @Autowired
@@ -83,7 +77,7 @@ public class PostController {
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity) {
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postService.save(postEntity);
-        return "redirect:/post/read?postId="+postEntity.getId();
+        return "redirect:/admin/post/read?postId="+postEntity.getId();
     }
 }
 

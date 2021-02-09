@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
 
 @Controller
-public class CommentController {
+@RequestMapping("/admin")
+public class AdminCommentController {
     @Autowired
     private CommentService commentService;
     @Autowired

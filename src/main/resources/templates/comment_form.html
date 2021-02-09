@@ -55,7 +55,7 @@
 </head>
 <body>
     <div>
-        <form action="#" th:action="@{/comment/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+        <form action="#" th:action="@{/admin/comment/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
             <input th:field="*{id}" type="hidden">
             <input th:field="*{postEntity}" type="hidden">
             <input th:field="*{createdAt}" type="hidden">

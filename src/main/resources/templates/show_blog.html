@@ -131,7 +131,7 @@
 <a href="#" class="blog-author" th:text="${postEntity.author.name}"></a>
 <p class="blog-timestamp" th:text="${postEntity.publishedAt}">published date and time</p>
 <!-- Delete and Update section (here change inputs to anchor tags latter)-->
-<div class="edit-group" sec:authorize="hasRole('ROLE_ADMIN')">
+<div class="edit-group" th:if="${#authentication.name} == ${postEntity.author.name} or ${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
     <form th:action="@{/admin/post/update(postId=${postEntity.id})}" method="post">
         <input class="post-update-btn" type="submit" value="Update">
     </form>

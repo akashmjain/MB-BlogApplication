@@ -20,4 +20,6 @@ public interface UserService {
 
     public List<PostEntity> getPostsByUserName(String query);
 
+    public UserEntity findByName(String name);
+
 }

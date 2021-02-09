@@ -38,11 +38,9 @@ public class AdminController {
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();
         model.addAttribute("postEntity", postEntity);
-        model.addAttribute("tagStringData", "");
         model.addAttribute("users", userService.findAll());
         return "write_blog";
     }
-
 
     /* UPDATE SECTION */
     @RequestMapping("/post/update")

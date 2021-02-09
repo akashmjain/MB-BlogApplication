@@ -98,7 +98,12 @@
 <body>
 <h1>Blog Application</h1>
 <!-- Create new Post button -->
-<a class="create-blog-link" th:href="@{admin/post/create}">Create new Post</a>
+<div sec:authorize="hasRole('ROLE_ADMIN')">
+    <a class="create-blog-link" th:href="@{/admin/post/create}">Create new Post</a>
+</div>
+<div sec:authorize="hasRole('ROLE_USER')">
+    <a class="create-blog-link" th:href="@{/user/post/create}">Create new Post</a>
+</div>
 <!-- Filter Div -->
 <form action="" class="searching-form">
     <!-- Search Bar -->

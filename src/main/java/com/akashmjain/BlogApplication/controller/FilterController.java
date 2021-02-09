@@ -114,8 +114,6 @@ public class FilterController {
                 }
             }
         } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println(posts);
             return posts;
         }
         System.out.println(filteredPosts);

@@ -28,25 +28,19 @@ public class PostController {
     @Autowired
     private TagService tagService;
 
+    private final int EXCERPT_SIZE = 100;
+
     /* CREATE SECTION */
     @RequestMapping("/post/create")
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();
         model.addAttribute("postEntity", postEntity);
         model.addAttribute("tagStringData", "");
+        model.addAttribute("users", userService.findAll());
         return "write_blog";
     }
 
-    /* READ SECTION */
-    @RequestMapping("/post/list")
-    public String readPostInPage(@RequestParam(name = "page", required = false, defaultValue = "0") int pageNo, @RequestParam(name = "limit", required = false, defaultValue = "5") int limit,Model model) {
-        Pageable page = PageRequest.of(pageNo, limit);
-        Page<PostEntity> pageWithPosts = postService.findPages(page);
-        model.addAttribute("totalPages",pageWithPosts.getTotalPages());
-        model.addAttribute("posts", pageWithPosts.getContent());
-        return "index";
-    }
-
+    /* READ SINGLE POST */
     @RequestMapping("/post/read")
     public String readPost(@RequestParam("postId") int postId, Model model) {
         model.addAttribute("postEntity", postService.findById(postId));
@@ -70,10 +64,13 @@ public class PostController {
 
     /* Calling */
     @RequestMapping("/post/create/save")
-    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity, @RequestParam("tag_string_data") String tagString) {
+    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity, @RequestParam("tagStringData") String tagString, @RequestParam("authorId") int authorId) {
+        String content = postEntity.getContent();
+        String excerpt = content.length() > EXCERPT_SIZE ? content.substring(0, EXCERPT_SIZE) : content;
+        postEntity.setAuthor(userService.findById(authorId));
+        postEntity.setContent(content);
+        postEntity.setExcerpt(excerpt);
         postEntity.setTags(tagService.stringToTag(tagString));
-        postEntity.setAuthor(userService.findById(1));
-        postEntity.setExcerpt("Some hardcoded excerpt to show");
         postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));

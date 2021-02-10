@@ -2,6 +2,7 @@ package com.akashmjain.BlogApplication.controller;
 
 import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.enitity.TagEntity;
 import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
@@ -46,8 +47,13 @@ public class AdminController {
     @RequestMapping("/post/update")
     public String updatePost(@RequestParam("postId") int postId, Model model) {
         PostEntity postEntity = postService.findById(postId);
+        String tagStringData = "";
+        for (TagEntity tagEntity : postEntity.getTags()) {
+            tagStringData += tagEntity.getName() + ",";
+        }
         model.addAttribute("postEntity", postEntity);
         model.addAttribute("users", userService.findAll());
+        model.addAttribute("tagStringData",tagStringData);
         return "update_blog";
     }
 
@@ -76,11 +82,14 @@ public class AdminController {
     }
 
     @RequestMapping("/post/update/save")
-    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,@RequestParam(value = "authorId", required = false, defaultValue = "-1") int authorId) {
+    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
+                                  @RequestParam(value = "authorId", required = false, defaultValue = "-1") int authorId,
+                                  @RequestParam("tag_string_data") String tagString) {
         if(authorId > 0) {
             postEntity.setAuthor(userService.findById(authorId));
         }
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        postEntity.setTags(tagService.stringToTag(tagString));
         postService.save(postEntity);
         return "redirect:/post/read?postId="+postEntity.getId();
     }

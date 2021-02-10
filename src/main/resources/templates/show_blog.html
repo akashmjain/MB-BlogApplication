@@ -101,12 +101,9 @@
             display: flex;
             justify-content: flex-end;
         }
-        .edit-group form {
-            margin: 2%;
-        }
         .post-update-btn, .post-delete-btn{
-            font-size: 1.2em;
-            padding: 3%;
+            font-size: 1.0em;
+            padding: 1%;
             border: solid grey;
             color: grey;
             background-color: transparent;
@@ -131,15 +128,14 @@
 <a href="#" class="blog-author" th:text="${postEntity.author.name}"></a>
 <p class="blog-timestamp" th:text="${postEntity.publishedAt}">published date and time</p>
 <!-- Delete and Update section (here change inputs to anchor tags latter)-->
-<div class="edit-group" th:if="${#authentication.name} == ${postEntity.author.name} or ${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
-    <form th:action="@{/admin/post/update(postId=${postEntity.id})}" method="post">
-        <input class="post-update-btn" type="submit" value="Update">
-    </form>
-    <form th:action="@{/admin/post/delete(postId=${postEntity.id})}" action="" method="post">
-        <input class="post-delete-btn" type="submit" value="Delete">
-    </form>
-</div>
-
+    <div class="edit-group" th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}">
+        <a th:href="@{/admin/post/update(postId=${postEntity.id})}">UPDATE</a>
+        <a th:href="@{/admin/post/update(postId=${postEntity.id})}">DELETE</a>
+    </div>
+    <div class="edit-group" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#authentication.name} == ${postEntity.author.name}">
+        <a class="post-update-btn" th:href="@{/user/post/update(postId=${postEntity.id})}">UPDATE</a>
+        <a class="post-delete-btn" th:href="@{/user/post/delete(postId=${postEntity.id})}">DELETE</a>
+    </div>
 <!--Tag section -->
 <ul class="tag-list">
     <li th:each="tag: ${postEntity.tags}" class="tag" th:text="${tag.name}"></li>

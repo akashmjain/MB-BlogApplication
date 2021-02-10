@@ -56,7 +56,19 @@
 </head>
 <body>
     <div>
-        <form name="comment_form" th:onsubmit="return validateForm()" th:action="@{/comment/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
+        <form th:object="${commentEntity}" th:if="${#authorization.expression('hasRole(''ROLE_USER'')')} and ${#authentication.name} == ${commentEntity.postEntity.author.name}" name="comment_form" th:onsubmit="return validateForm()" th:action="@{/user/comment/update/save(postId=*{postEntity.id})}"  method="post" class="comment-form">
+            <input th:field="*{id}" type="hidden">
+            <input th:field="*{postEntity}" type="hidden">
+            <input th:field="*{createdAt}" type="hidden">
+            <input th:field="*{updatedAt}" type="hidden">
+
+            <input required th:field="*{name}" name="full_name" class ="text-input" type="text" placeholder="Full Name">
+            <input required th:field="*{email}" name="email" class="text-input" type="email" placeholder="email">
+            <textarea required th:field="*{comment}" name="comment" rows="5" class="text-input" placeholder="comment"></textarea>
+            <input class="submit-btn" type="submit" value="SUBMIT">
+        </form>
+
+        <form th:if="${#authorization.expression('hasRole(''ROLE_ADMIN'')')}" name="comment_form" th:action="@{/admin/comment/update/save(postId=*{postEntity.id})}" th:object="${commentEntity}" method="post" class="comment-form">
             <input th:field="*{id}" type="hidden">
             <input th:field="*{postEntity}" type="hidden">
             <input th:field="*{createdAt}" type="hidden">

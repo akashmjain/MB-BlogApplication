@@ -92,11 +92,12 @@ public class AnonymousController {
         commentEntity.setPostEntity(postEntity);
         commentEntity.setId(0);
         model.addAttribute("commentEntity", commentEntity);
-        return "comment_form";
+        return "comment_create_form";
     }
 
-    @RequestMapping("/comment/save")
+    @RequestMapping("/comment/create/save")
     public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
+        commentEntity.setId(0); // to make sure that Id not passed and brand new comment is created
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         commentService.save(commentEntity);
         return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();

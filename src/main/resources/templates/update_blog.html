@@ -68,9 +68,9 @@
         <input  th:field="*{updatedAt}" type="hidden">
         <input  th:field="*{tags}" type="hidden">
 
-        <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
-        <input th:value="${tagStringData}" name="tag_string_data" class="text-input" type="text" placeholder="ags put in this format(ex. #tag1 #tag2 )">
-        <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
+        <input th:field="*{title}" name="blogTitle" class ="text-input" type="text" placeholder="Title">
+        <input th:value="${tagStringData}" name="tagStringData" class="text-input" type="text" placeholder="ags put in this format(ex. #tag1 #tag2 )">
+        <textarea th:field="*{content}" name="blogTextarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
         <input class="submit-btn" type="submit" value="Publish">
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <p>Select Author</p>

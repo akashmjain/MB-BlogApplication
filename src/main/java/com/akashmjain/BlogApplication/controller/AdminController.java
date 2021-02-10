@@ -8,17 +8,12 @@ import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
-import java.util.Collection;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -84,7 +79,7 @@ public class AdminController {
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
                                   @RequestParam(value = "authorId", required = false, defaultValue = "-1") int authorId,
-                                  @RequestParam("tag_string_data") String tagString) {
+                                  @RequestParam("tagStringData") String tagString) {
         if(authorId > 0) {
             postEntity.setAuthor(userService.findById(authorId));
         }
@@ -99,7 +94,7 @@ public class AdminController {
     public String updateComment(@RequestParam("commentId") int commentId,Model model) {
         CommentEntity commentEntity = commentService.findById(commentId);
         model.addAttribute("commentEntity", commentEntity);
-        return "comment_form";
+        return "comment_update_form";
     }
 
     /* DELETE COMMENT */

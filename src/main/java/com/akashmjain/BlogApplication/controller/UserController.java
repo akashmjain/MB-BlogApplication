@@ -1,6 +1,8 @@
 package com.akashmjain.BlogApplication.controller;
 
+import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.enitity.TagEntity;
 import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
@@ -37,27 +39,111 @@ public class UserController {
         return "write_blog";
     }
 
+    @RequestMapping("/post/update")
+    public String updatePost(@RequestParam("postId") int postId, Model model) {
+        PostEntity postEntity = postService.findById(postId);
+        String tagStringData = "";
+        for (TagEntity tagEntity : postEntity.getTags()) {
+            tagStringData += tagEntity.getName() + ",";
+        }
+        model.addAttribute("postEntity", postEntity);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("tagStringData",tagStringData);
+        return "update_blog";
+    }
 
     @RequestMapping("/post/create/save")
-    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity, @RequestParam("tagStringData") String tagString) {
-        String content = postEntity.getContent();
-        String excerpt = content.length() > EXCERPT_SIZE ? content.substring(0, EXCERPT_SIZE) : content;
+    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity,
+                              @RequestParam("tagStringData") String tagString) {
         Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
         if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
+            String username = ((UserDetails) principal).getUsername();
+            String content = postEntity.getContent();
+            String excerpt = content.length() > EXCERPT_SIZE ? content.substring(0, EXCERPT_SIZE) : content;
+            postEntity.setAuthor(userService.findByName(username));
+            postEntity.setContent(content);
+            postEntity.setExcerpt(excerpt);
+            postEntity.setTags(tagService.stringToTag(tagString));
+            postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+            postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+            postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+            postEntity.setIsPublished(true);
+            postService.save(postEntity);
         } else {
-            username = "amcilreavy9"; // hardcoded in case something goes wrong
+            return "redirect:/error";
         }
-        postEntity.setAuthor(userService.findByName(username));
-        postEntity.setContent(content);
-        postEntity.setExcerpt(excerpt);
-        postEntity.setTags(tagService.stringToTag(tagString));
-        postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setIsPublished(true);
-        postService.save(postEntity);
         return "redirect:/";
     }
+
+    @RequestMapping("/post/update/save")
+    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
+                                  @RequestParam("tag_string_data") String tagString) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if (username.equals(postEntity.getAuthor().getName())) {
+                postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                postEntity.setTags(tagService.stringToTag(tagString));
+                postService.save(postEntity);
+            } else {
+                return "redirect:/error";
+            }
+        } else {
+            return "redirect:/error";
+        }
+        return "redirect:/post/read?postId="+postEntity.getId();
+    }
+
+    @RequestMapping("/post/delete")
+    public String deletePost(@RequestParam("postId")int postId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if(postService.findById(postId).getAuthor().getName().equals(username)) {
+                postService.deleteById(postId);
+            } else {
+                return "redirect:/error";
+            }
+        }
+
+        return "redirect:/";
+    }
+
+    /* UPDATE COMMENT */
+    @RequestMapping("/comment/update")
+    public String updateComment(@RequestParam("commentId") int commentId,Model model) {
+        CommentEntity commentEntity = commentService.findById(commentId);
+        model.addAttribute("commentEntity", commentEntity);
+        return "comment_update_form";
+    }
+
+    @RequestMapping("/comment/update/save")
+    public String updateComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if(username.equals(commentEntity.getPostEntity().getAuthor().getName())) {
+                commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                commentService.save(commentEntity);
+            } else {
+                return "redirect:/error";
+            }
+        }
+        return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
+    }
+
+    /* DELETE COMMENT */
+    @RequestMapping("/comment/delete")
+    public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
+        CommentEntity commentEntity = commentService.findById(commentId);
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if(commentEntity.getPostEntity().getAuthor().getName().equals(username)) {
+                commentService.deleteById(commentId);
+            }
+        }
+        return "redirect:/post/read?postId=" + postId;
+    }
+
 }

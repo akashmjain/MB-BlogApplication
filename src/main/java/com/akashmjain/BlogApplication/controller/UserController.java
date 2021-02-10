@@ -48,7 +48,7 @@ public class UserController {
         }
         model.addAttribute("postEntity", postEntity);
         model.addAttribute("users", userService.findAll());
-        model.addAttribute("tagStringData",tagStringData);
+        model.addAttribute("tagStringData", tagStringData);
         return "update_blog";
     }
 
@@ -77,7 +77,7 @@ public class UserController {
 
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
-                                  @RequestParam("tag_string_data") String tagString) {
+                                  @RequestParam("tagStringData") String tagString) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();

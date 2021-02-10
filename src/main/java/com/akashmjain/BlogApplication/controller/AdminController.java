@@ -97,6 +97,12 @@ public class AdminController {
         return "comment_update_form";
     }
 
+    @RequestMapping("/comment/update/save")
+    public String saveUpdatedComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
+        commentService.save(commentEntity);
+        return "redirect:/post/read?postId="+commentEntity.getPostEntity().getId();
+    }
+
     /* DELETE COMMENT */
     @RequestMapping("/comment/delete")
     public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {

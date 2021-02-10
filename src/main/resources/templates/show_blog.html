@@ -158,7 +158,7 @@
         <a class="delete-button" th:href="@{/admin/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
         <a class="delete-button" th:href="@{/admin/comment/update(commentId=${comment.id})}">Update</a>
     </div>
-    <div th:if="${#authentication.name} == ${postEntity.author.name}">
+    <div th:if="${#authentication.name} == ${postEntity.author.name} and ${#authorization.expression('hasRole(''ROLE_USER'')')}">
         <a class="delete-button" th:href="@{/user/comment/delete(postId=${postEntity.id},commentId=${comment.id})}">Delete</a>
         <a class="delete-button" th:href="@{/user/comment/update(commentId=${comment.id})}">Update</a>
     </div>

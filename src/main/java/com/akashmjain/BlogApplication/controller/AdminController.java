@@ -28,10 +28,9 @@ public class AdminController {
     private TagService tagService;
     @Autowired
     private CommentService commentService;
-
     private final int EXCERPT_SIZE = 100;
 
-    /* CREATE SECTION */
+    /* POST SECTION */
     @RequestMapping("/post/create")
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();
@@ -40,28 +39,6 @@ public class AdminController {
         return "write_blog";
     }
 
-    /* UPDATE SECTION */
-    @RequestMapping("/post/update")
-    public String updatePost(@RequestParam("postId") int postId, Model model) {
-        PostEntity postEntity = postService.findById(postId);
-        String tagStringData = "";
-        for (TagEntity tagEntity : postEntity.getTags()) {
-            tagStringData += tagEntity.getName() + ",";
-        }
-        model.addAttribute("postEntity", postEntity);
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("tagStringData",tagStringData);
-        return "update_blog";
-    }
-
-    /* DELETE POST */
-    @RequestMapping("/post/delete")
-    public String deletePost(@RequestParam("postId")int postId) {
-        postService.deleteById(postId);
-        return "redirect:/";
-    }
-
-    /* Calling */
     @RequestMapping("/post/create/save")
     public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity,
                               @RequestParam("tagStringData") String tagString,
@@ -83,6 +60,25 @@ public class AdminController {
         return "redirect:/";
     }
 
+    @RequestMapping("/post/update")
+    public String updatePost(@RequestParam("postId") int postId, Model model) {
+        PostEntity postEntity = postService.findById(postId);
+        String tagStringData = "";
+        for (TagEntity tagEntity : postEntity.getTags()) {
+            tagStringData += tagEntity.getName() + ",";
+        }
+        model.addAttribute("postEntity", postEntity);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("tagStringData",tagStringData);
+        return "update_blog";
+    }
+
+    @RequestMapping("/post/delete")
+    public String deletePost(@RequestParam("postId")int postId) {
+        postService.deleteById(postId);
+        return "redirect:/";
+    }
+
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
                                   @RequestParam(value = "authorId", required = false) Integer authorId,
@@ -99,6 +95,7 @@ public class AdminController {
         return "redirect:/post/read?postId="+postEntity.getId();
     }
 
+
     /* COMMENT SECTION */
     @RequestMapping("/comment/update")
     public String updateComment(@RequestParam("commentId") int commentId,Model model) {
@@ -113,19 +110,16 @@ public class AdminController {
         return "redirect:/post/read?postId="+commentEntity.getPostEntity().getId();
     }
 
-    /* DELETE COMMENT */
     @RequestMapping("/comment/delete")
     public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
         commentService.deleteById(commentId);
         return "redirect:/post/read?postId=" + postId;
     }
 
+    /* DASHBOARD SECTION */
     @RequestMapping("/dashboard")
     public String userDashboard(Model model) {
-        List<PostEntity> listOfPosts = postService.findAll()
-                .stream()
-                .filter(post -> !post.getIsPublished())
-                .collect(Collectors.toList());
+        List<PostEntity> listOfPosts = postService.findAll().stream().filter(post -> !post.getIsPublished()).collect(Collectors.toList());
         model.addAttribute("posts", listOfPosts);
         return "dashboard";
     }
@@ -139,4 +133,3 @@ public class AdminController {
         return "redirect:/admin/dashboard";
     }
 }
-

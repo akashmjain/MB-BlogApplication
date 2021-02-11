@@ -11,8 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -38,6 +36,7 @@ public class AnonymousController {
 
     private String urlData;
 
+    /* SEARCH AND FILTER SECTION */
     @RequestMapping("/")
     public String getFilteredData(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                   @RequestParam(value = "search", required = false) String search,
@@ -49,7 +48,7 @@ public class AnonymousController {
                                   Model model) {
         urlData = "?";
         List<PostEntity> posts;
-        if(search == null && tagIds == null && authorIds == null)
+        if (search == null && tagIds == null && authorIds == null)
             posts = postService.findAll();
         else {
             posts = getFilteredPostEntityList(authorIds, tagIds, search);
@@ -59,7 +58,6 @@ public class AnonymousController {
         posts = getPostFilteredByDate(startDate, endDate, posts);
         posts = getSortedPostEntityList(posts, sortOrder);
         posts = getPostFilteredByDate(startDate, endDate, posts);
-
         Page<PostEntity> page = getPaginatedData(posts, pageNo, 4);
         model.addAttribute("totalPages",page.getTotalPages());
         model.addAttribute("posts", page.getContent());
@@ -71,7 +69,7 @@ public class AnonymousController {
 
     @RequestMapping("/post/read")
     public String readPost(@RequestParam("postId") int postId, Model model) {
-        if(postService.findById(postId).getIsPublished()) {
+        if (postService.findById(postId).getIsPublished()) {
             model.addAttribute("postEntity", postService.findById(postId));
             return "show_blog";
         } else {
@@ -79,6 +77,7 @@ public class AnonymousController {
         }
     }
 
+    /* COMMENT SECTION */
     @RequestMapping("/comment/create")
     public String createComment(@RequestParam("postId") int postId, Model model) {
         PostEntity postEntity = postService.findById(postId);
@@ -99,6 +98,7 @@ public class AnonymousController {
         return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
     }
 
+    /*Search and Filter Helper methods*/
     private List<PostEntity> getUniquePostEntityList(List<PostEntity> posts) {
         Set<PostEntity> set = new LinkedHashSet<>(posts);
         posts.clear();

@@ -10,7 +10,6 @@ import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,24 +35,13 @@ public class UserController {
 
     private final int EXCERPT_SIZE = 100;
 
+    /* POST SECTION FOR USERS */
+
     @RequestMapping("/post/create")
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();
         model.addAttribute("postEntity", postEntity);
         return "write_blog";
-    }
-
-    @RequestMapping("/post/update")
-    public String updatePost(@RequestParam("postId") int postId, Model model) {
-        PostEntity postEntity = postService.findById(postId);
-        String tagStringData = "";
-        for (TagEntity tagEntity : postEntity.getTags()) {
-            tagStringData += tagEntity.getName() + ",";
-        }
-        model.addAttribute("postEntity", postEntity);
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("tagStringData", tagStringData);
-        return "update_blog";
     }
 
     @RequestMapping("/post/create/save")
@@ -80,6 +68,19 @@ public class UserController {
             return "redirect:/error";
         }
         return "redirect:/";
+    }
+
+    @RequestMapping("/post/update")
+    public String updatePost(@RequestParam("postId") int postId, Model model) {
+        PostEntity postEntity = postService.findById(postId);
+        String tagStringData = "";
+        for (TagEntity tagEntity : postEntity.getTags()) {
+            tagStringData += tagEntity.getName() + ",";
+        }
+        model.addAttribute("postEntity", postEntity);
+        model.addAttribute("users", userService.findAll());
+        model.addAttribute("tagStringData", tagStringData);
+        return "update_blog";
     }
 
     @RequestMapping("/post/update/save")
@@ -121,7 +122,7 @@ public class UserController {
         return "redirect:/";
     }
 
-    /* UPDATE COMMENT */
+    /* COMMENT SECTION FOR USERS */
     @RequestMapping("/comment/update")
     public String updateComment(@RequestParam("commentId") int commentId,Model model) {
         CommentEntity commentEntity = commentService.findById(commentId);
@@ -158,6 +159,8 @@ public class UserController {
         return "redirect:/post/read?postId=" + postId;
     }
 
+
+    /* DASHBOARD SECTION */
     @RequestMapping("/dashboard")
     public String userDashboard(Model model) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -168,7 +171,7 @@ public class UserController {
                     .stream()
                     .filter(post -> !post.getIsPublished())
                     .collect(Collectors.toList());
-            listOfPosts.sort((o1, o2) -> o1.getUpdatedAt().compareTo(o2.getUpdatedAt()));
+            listOfPosts.sort((o1, o2) -> o2.getUpdatedAt().compareTo(o1.getUpdatedAt()));
             model.addAttribute("posts", listOfPosts);
         }
         return "dashboard";

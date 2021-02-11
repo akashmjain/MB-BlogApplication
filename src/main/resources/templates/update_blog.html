@@ -71,13 +71,19 @@
         <input th:field="*{title}" name="blogTitle" class ="text-input" type="text" placeholder="Title">
         <input th:value="${tagStringData}" name="tagStringData" class="text-input" type="text" placeholder="ags put in this format(ex. #tag1 #tag2 )">
         <textarea th:field="*{content}" name="blogTextarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
-        <input class="submit-btn" type="submit" value="Publish">
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <p>Select Author</p>
-            <select multiple name="authorId">
+            <select name="authorId" th:field="*{author.id}">
                 <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
             </select>
         </div>
+        <span style="display: flex;">
+            <label for="publish">publish the blog</label><br>
+            <input checked type="radio" id="publish" name="publish" value="true">
+            <label for="unpublish">Do not publish</label><br>
+            <input type="radio" id="unpublish" name="publish" value="false">
+        </span>
+        <input class="submit-btn" type="submit" value="Publish">
     </form>
 </div>
 </body>

@@ -43,8 +43,8 @@ public class PostServiceImpl implements PostService{
     }
 
     @Override
-    public void save(PostEntity theEmployee) {
-        postRepository.save(theEmployee);
+    public void save(PostEntity postEntity) {
+        postRepository.save(postEntity);
     }
 
     @Override

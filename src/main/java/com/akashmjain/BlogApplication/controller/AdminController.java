@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -61,7 +63,10 @@ public class AdminController {
 
     /* Calling */
     @RequestMapping("/post/create/save")
-    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity, @RequestParam("tagStringData") String tagString, @RequestParam("authorId") int authorId) {
+    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity,
+                              @RequestParam("tagStringData") String tagString,
+                              @RequestParam("publish") boolean isPublished,
+                              @RequestParam("authorId") int authorId) {
         String content = postEntity.getContent();
         String excerpt = content.length() > EXCERPT_SIZE ? content.substring(0, EXCERPT_SIZE) : content;
         postEntity.setAuthor(userService.findById(authorId));
@@ -70,26 +75,34 @@ public class AdminController {
         postEntity.setTags(tagService.stringToTag(tagString));
         postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setIsPublished(true);
+        postEntity.setIsPublished(isPublished);
+        if (isPublished) {
+            postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+        }
         postService.save(postEntity);
         return "redirect:/";
     }
 
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
-                                  @RequestParam(value = "authorId", required = false, defaultValue = "-1") int authorId,
+                                  @RequestParam(value = "authorId", required = false) Integer authorId,
+                                  @RequestParam("publish") boolean isPublished,
                                   @RequestParam("tagStringData") String tagString) {
-        if(authorId > 0) {
-            postEntity.setAuthor(userService.findById(authorId));
-        }
+//        if(authorId == null) {
+//
+//        }
+        postEntity.setAuthor(userService.findById(authorId));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        postEntity.setIsPublished(isPublished);
+        if (isPublished) {
+            postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+        }
         postEntity.setTags(tagService.stringToTag(tagString));
         postService.save(postEntity);
         return "redirect:/post/read?postId="+postEntity.getId();
     }
 
-    /* UPDATE COMMENT */
+    /* COMMENT SECTION */
     @RequestMapping("/comment/update")
     public String updateComment(@RequestParam("commentId") int commentId,Model model) {
         CommentEntity commentEntity = commentService.findById(commentId);
@@ -108,6 +121,25 @@ public class AdminController {
     public String deleteComment(@RequestParam("postId") int postId, @RequestParam("commentId") int commentId) {
         commentService.deleteById(commentId);
         return "redirect:/post/read?postId=" + postId;
+    }
+
+    @RequestMapping("/dashboard")
+    public String userDashboard(Model model) {
+        List<PostEntity> listOfPosts = postService.findAll()
+                .stream()
+                .filter(post -> !post.getIsPublished())
+                .collect(Collectors.toList());
+        model.addAttribute("posts", listOfPosts);
+        return "dashboard";
+    }
+
+    @RequestMapping("/post/publish")
+    public String publishPost(@RequestParam("postId") int postId) {
+        PostEntity post = postService.findById(postId);
+        post.setIsPublished(true);
+        post.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+        postService.save(post);
+        return "redirect:/admin/dashboard";
     }
 }
 

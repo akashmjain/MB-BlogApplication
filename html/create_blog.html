@@ -51,6 +51,7 @@
         .text-area {
             resize: none;
         }
+        
 	</style>
 </head>
 <body>
@@ -60,6 +61,12 @@
             <input name="full_name" class ="text-input" type="text" placeholder="Title">
             <input name="email" class="text-input" type="email" placeholder="Tags put in this format(ex. #tag1 #tag2 )">
             <textarea name="blog-textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
+            <span style="display: flex;">
+                <label for="publish">publish the blog</label><br>
+                <input type="radio" id="publish" name="publish" value="male">
+                <label for="unpublish">Do not publish</label><br>
+                <input type="radio" id="unpublish" name="publish" value="female">
+            </span>
             <input class="submit-btn" type="submit" value="SUBMIT">          
         </form>
     </div>

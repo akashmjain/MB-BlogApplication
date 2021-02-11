@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class AnonymousController {
@@ -53,6 +54,7 @@ public class AnonymousController {
         else {
             posts = getFilteredPostEntityList(authorIds, tagIds, search);
         }
+        posts = posts.stream().filter(post -> post.getIsPublished()).collect(Collectors.toList());
         posts = getUniquePostEntityList(posts);
         posts = getPostFilteredByDate(startDate, endDate, posts);
         posts = getSortedPostEntityList(posts, sortOrder);
@@ -159,7 +161,6 @@ public class AnonymousController {
         } catch (Exception e) {
             return posts;
         }
-        System.out.println(filteredPosts);
         return filteredPosts;
     }
 

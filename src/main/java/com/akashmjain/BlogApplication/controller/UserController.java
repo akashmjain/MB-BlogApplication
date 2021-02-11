@@ -3,12 +3,14 @@ package com.akashmjain.BlogApplication.controller;
 import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
 import com.akashmjain.BlogApplication.enitity.TagEntity;
+import com.akashmjain.BlogApplication.enitity.UserEntity;
 import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/user")
@@ -54,7 +58,8 @@ public class UserController {
 
     @RequestMapping("/post/create/save")
     public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity,
-                              @RequestParam("tagStringData") String tagString) {
+                              @RequestParam("tagStringData") String tagString,
+                              @RequestParam("publish") boolean isPublished) {
         Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
@@ -66,8 +71,10 @@ public class UserController {
             postEntity.setTags(tagService.stringToTag(tagString));
             postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
             postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-            postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
-            postEntity.setIsPublished(true);
+            if (isPublished) {
+                postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+            }
+            postEntity.setIsPublished(isPublished);
             postService.save(postEntity);
         } else {
             return "redirect:/error";
@@ -77,13 +84,18 @@ public class UserController {
 
     @RequestMapping("/post/update/save")
     public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
-                                  @RequestParam("tagStringData") String tagString) {
+                                  @RequestParam("tagStringData") String tagString,
+                                  @RequestParam("publish") boolean isPublished) {
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {
             String username = ((UserDetails) principal).getUsername();
             if (username.equals(postEntity.getAuthor().getName())) {
                 postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
                 postEntity.setTags(tagService.stringToTag(tagString));
+                postEntity.setIsPublished(isPublished);
+                if (isPublished) {
+                    postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+                }
                 postService.save(postEntity);
             } else {
                 return "redirect:/error";
@@ -146,4 +158,36 @@ public class UserController {
         return "redirect:/post/read?postId=" + postId;
     }
 
+    @RequestMapping("/dashboard")
+    public String userDashboard(Model model) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            UserEntity userEntity = userService.findByName(username);
+            List<PostEntity> listOfPosts = userEntity.getPosts()
+                    .stream()
+                    .filter(post -> !post.getIsPublished())
+                    .collect(Collectors.toList());
+            System.out.println(listOfPosts);
+            model.addAttribute("posts", userEntity.getPosts());
+        }
+        return "dashboard";
+    }
+
+    @RequestMapping("/post/publish")
+    public String publishPost(@RequestParam("postId") int postId) {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            PostEntity post = postService.findById(postId);
+            if (post.getAuthor().getName().equals(username)) {
+                post.setIsPublished(true);
+                post.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+                postService.save(post);
+            } else {
+                return "redirect:/error";
+            }
+        }
+        return "redirect:/user/dashboard";
+    }
 }

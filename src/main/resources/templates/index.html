@@ -100,9 +100,11 @@
 <!-- Create new Post button -->
 <div sec:authorize="hasRole('ROLE_ADMIN')">
     <a class="create-blog-link" th:href="@{/admin/post/create}">Create new Post</a>
+    <a th:href="@{/admin/dashboard}">Publish Posts</a>
 </div>
 <div sec:authorize="hasRole('ROLE_USER')">
     <a class="create-blog-link" th:href="@{/user/post/create}">Create new Post</a>
+    <a th:href="@{/user/dashboard}">Publish Posts</a>
 </div>
 <!-- Filter Div -->
 <form action="" class="searching-form">

@@ -58,15 +58,24 @@
 <div class="main">
     <h1>Create/Update Blog</h1>
     <form th:object="${postEntity}" class="create-form" action="#" th:action="@{create/save}" method="post">
-        <input th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
-        <input name="tagStringData" class="text-input" type="text" placeholder="tags put in this format(ex. tag1,tag2,...)">
-        <textarea th:field="*{content}" name="blog_textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
+        <input required th:field="*{title}" name="blog_title" class ="text-input" type="text" placeholder="Title">
+        <input required name="tagStringData" class="text-input" type="text" placeholder="tags put in this format(ex. tag1,tag2,...)">
+        <textarea required th:field="*{content}" name="blog_textarea" rows="20" class="text-input text-area" placeholder="Write Your blog here"></textarea>
+
         <div sec:authorize="hasRole('ROLE_ADMIN')">
             <p>Select Author</p>
-            <select multiple name="authorId">
+            <select name="authorId">
                 <option th:each="user : ${users}" th:value="${user.id}" th:text="${user.name}"></option>
             </select>
         </div>
+
+        <span style="display: flex;">
+            <label for="publish">publish the blog</label><br>
+            <input checked type="radio" id="publish" name="publish" value="true">
+            <label for="unpublish">Do not publish</label><br>
+            <input type="radio" id="unpublish" name="publish" value="false">
+        </span>
+
         <input class="submit-btn" type="submit" value="Publish">
     </form>
 </div>

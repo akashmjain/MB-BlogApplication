@@ -12,10 +12,10 @@ public class PostEntity {
     @Column(name = "id")
     private int id;
 
-    @Column(name = "title")
+    @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "excerpt")
+    @Column(name = "excerpt", columnDefinition = "TEXT")
     private String excerpt;
 
     @Column(name = "content")

@@ -88,9 +88,6 @@ public class AdminController {
                                   @RequestParam(value = "authorId", required = false) Integer authorId,
                                   @RequestParam("publish") boolean isPublished,
                                   @RequestParam("tagStringData") String tagString) {
-//        if(authorId == null) {
-//
-//        }
         postEntity.setAuthor(userService.findById(authorId));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setIsPublished(isPublished);

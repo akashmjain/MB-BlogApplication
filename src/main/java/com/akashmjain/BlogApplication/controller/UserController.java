@@ -103,7 +103,7 @@ public class UserController {
         } else {
             return "redirect:/error";
         }
-        return "redirect:/post/read?postId="+postEntity.getId();
+        return "redirect:/";
     }
 
     @RequestMapping("/post/delete")
@@ -168,8 +168,8 @@ public class UserController {
                     .stream()
                     .filter(post -> !post.getIsPublished())
                     .collect(Collectors.toList());
-            System.out.println(listOfPosts);
-            model.addAttribute("posts", userEntity.getPosts());
+            listOfPosts.sort((o1, o2) -> o1.getUpdatedAt().compareTo(o2.getUpdatedAt()));
+            model.addAttribute("posts", listOfPosts);
         }
         return "dashboard";
     }

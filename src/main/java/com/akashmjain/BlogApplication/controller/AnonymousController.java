@@ -71,18 +71,12 @@ public class AnonymousController {
 
     @RequestMapping("/post/read")
     public String readPost(@RequestParam("postId") int postId, Model model) {
-        model.addAttribute("postEntity", postService.findById(postId));
-        Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String username;
-        Collection<?> gr = null;
-        if (principal instanceof UserDetails) {
-            username = ((UserDetails) principal).getUsername();
-            gr = ((UserDetails) principal).getAuthorities();
+        if(postService.findById(postId).getIsPublished()) {
+            model.addAttribute("postEntity", postService.findById(postId));
+            return "show_blog";
         } else {
-            username = principal.toString();
+            return "redirect:/error?error=The page is not published yet";
         }
-        System.out.println(gr);
-        return "show_blog";
     }
 
     @RequestMapping("/comment/create")

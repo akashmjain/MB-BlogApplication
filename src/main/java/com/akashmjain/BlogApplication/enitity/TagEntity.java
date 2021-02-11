@@ -1,12 +1,15 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Table(name = "tags")
-public class TagEntity {
+public class TagEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -37,6 +40,7 @@ public class TagEntity {
             joinColumns = @JoinColumn(name = "tag_id"),
             inverseJoinColumns = @JoinColumn(name = "post_id")
     )
+    @JsonManagedReference
     private List<PostEntity> posts;
 
     public int getId() {
@@ -79,4 +83,13 @@ public class TagEntity {
         this.posts = posts;
     }
 
+    @Override
+    public String toString() {
+        return "TagEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
 }

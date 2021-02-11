@@ -1,11 +1,14 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "comments")
-public class CommentEntity {
+public class CommentEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -22,6 +25,7 @@ public class CommentEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
+    @JsonManagedReference
     private PostEntity postEntity;
 
     @Column(name = "created_at")
@@ -97,5 +101,4 @@ public class CommentEntity {
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
-
 }

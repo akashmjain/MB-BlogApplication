@@ -13,16 +13,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 public class AnonymousController {
     @Autowired
     private UserService userService;
@@ -37,8 +35,8 @@ public class AnonymousController {
     private String urlData;
 
     /* SEARCH AND FILTER SECTION */
-    @RequestMapping("/")
-    public String getFilteredData(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
+    @GetMapping("/")
+    public List<PostEntity> getFilteredData(@RequestParam(value = "page", required = false, defaultValue = "0") int pageNo,
                                   @RequestParam(value = "search", required = false) String search,
                                   @RequestParam(value = "tagId", required = false) List<Integer> tagIds,
                                   @RequestParam(value = "authorId", required = false) List<Integer> authorIds,
@@ -64,7 +62,8 @@ public class AnonymousController {
         model.addAttribute("pathTo", urlData);
         model.addAttribute("allUsers", userService.findAll());
         model.addAttribute("allTags", tagService.findAll());
-        return "index";
+
+        return posts;
     }
 
     @RequestMapping("/post/read")

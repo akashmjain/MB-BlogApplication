@@ -1,12 +1,16 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
 @Entity
 @Table(name = "posts")
-public class PostEntity {
+public class PostEntity implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -24,6 +28,7 @@ public class PostEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "author")
+    @JsonManagedReference
     private UserEntity author;
 
     @Column(name = "published_at")
@@ -40,6 +45,7 @@ public class PostEntity {
 
     @OneToMany(mappedBy = "postEntity",
                     cascade = {CascadeType.ALL})
+    @JsonBackReference
     private List<CommentEntity> comments;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -48,6 +54,7 @@ public class PostEntity {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @JsonBackReference
     private List<TagEntity> tags;
 
     public PostEntity() {}

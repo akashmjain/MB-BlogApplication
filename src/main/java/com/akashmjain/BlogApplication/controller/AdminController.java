@@ -10,16 +10,14 @@ import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@RestController("/admin")
+@RestController
+@RequestMapping("/adminTest")
 public class AdminController {
     @Autowired
     private PostService postService;
@@ -32,18 +30,9 @@ public class AdminController {
     private final int EXCERPT_SIZE = 100;
 
     /* POST SECTION */
-    @RequestMapping("/post/create")
-    public String createPost(Model model) {
-        PostEntity postEntity = new PostEntity();
-        model.addAttribute("postEntity", postEntity);
-        model.addAttribute("users", userService.findAll());
-        return "write_blog";
-    }
-
-    @RequestMapping("/post/create/save")
-    public String saveNewPost(@ModelAttribute("postEntity") PostEntity postEntity,
+    @PostMapping("/post/create")
+    public PostEntity saveNewPost(@RequestBody PostEntity postEntity,
                               @RequestParam("tagStringData") String tagString,
-                              @RequestParam("publish") boolean isPublished,
                               @RequestParam("authorId") int authorId) {
         String content = postEntity.getContent();
         String excerpt = content.length() > EXCERPT_SIZE ? content.substring(0, EXCERPT_SIZE) : content;
@@ -53,59 +42,39 @@ public class AdminController {
         postEntity.setTags(tagService.stringToTag(tagString));
         postEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setIsPublished(isPublished);
-        if (isPublished) {
+        if (postEntity.getIsPublished()) {
             postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
         }
         postService.save(postEntity);
-        return "redirect:/";
+        return postEntity;
+    }
+
+    @DeleteMapping("/post/delete")
+    public String deletePost(@RequestParam("postId")int postId) {
+        postService.deleteById(postId);
+        return "Deleted Post";
     }
 
     @RequestMapping("/post/update")
-    public String updatePost(@RequestParam("postId") int postId, Model model) {
-        PostEntity postEntity = postService.findById(postId);
-        String tagStringData = "";
-        for (TagEntity tagEntity : postEntity.getTags()) {
-            tagStringData += tagEntity.getName() + ",";
-        }
-        model.addAttribute("postEntity", postEntity);
-        model.addAttribute("users", userService.findAll());
-        model.addAttribute("tagStringData",tagStringData);
-        return "update_blog";
-    }
-
-    @RequestMapping("/post/delete")
-    public String deletePost(@RequestParam("postId")int postId) {
-        postService.deleteById(postId);
-        return "redirect:/";
-    }
-
-    @RequestMapping("/post/update/save")
-    public String saveUpdatedPost(@ModelAttribute("postEntity") PostEntity postEntity,
+    public PostEntity saveUpdatedPost(@RequestBody PostEntity post,
                                   @RequestParam(value = "authorId", required = false) Integer authorId,
-                                  @RequestParam("publish") boolean isPublished,
                                   @RequestParam("tagStringData") String tagString) {
-        postEntity.setAuthor(userService.findById(authorId));
+        PostEntity postEntity = postService.findById(post.getId());
+        postEntity.setTitle(post.getTitle());
+        postEntity.setExcerpt(post.getExcerpt());
+        postEntity.setContent(post.getContent());
+        postEntity.setIsPublished(post.getIsPublished());
+        postEntity.setAuthor(userService.findById(authorId) == null ? postEntity.getAuthor() : userService.findById(authorId));
         postEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        postEntity.setIsPublished(isPublished);
-        if (isPublished) {
+        if (postEntity.getIsPublished()) {
             postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
         }
         postEntity.setTags(tagService.stringToTag(tagString));
         postService.save(postEntity);
-        return "redirect:/post/read?postId="+postEntity.getId();
+        return postEntity;
     }
-
-
     /* COMMENT SECTION */
     @RequestMapping("/comment/update")
-    public String updateComment(@RequestParam("commentId") int commentId,Model model) {
-        CommentEntity commentEntity = commentService.findById(commentId);
-        model.addAttribute("commentEntity", commentEntity);
-        return "comment_update_form";
-    }
-
-    @RequestMapping("/comment/update/save")
     public String saveUpdatedComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
         commentService.save(commentEntity);
         return "redirect:/post/read?postId="+commentEntity.getPostEntity().getId();
@@ -118,13 +87,6 @@ public class AdminController {
     }
 
     /* DASHBOARD SECTION */
-    @RequestMapping("/dashboard")
-    public String userDashboard(Model model) {
-        List<PostEntity> listOfPosts = postService.findAll().stream().filter(post -> !post.getIsPublished()).collect(Collectors.toList());
-        model.addAttribute("posts", listOfPosts);
-        return "dashboard";
-    }
-
     @RequestMapping("/post/publish")
     public String publishPost(@RequestParam("postId") int postId) {
         PostEntity post = postService.findById(postId);

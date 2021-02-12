@@ -1,5 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -103,6 +105,7 @@ public class PostEntity implements Serializable {
         return author;
     }
 
+    @JsonIgnore
     public void setAuthor(UserEntity author) {
         this.author = author;
     }
@@ -111,6 +114,7 @@ public class PostEntity implements Serializable {
         return publishedAt;
     }
 
+    @JsonIgnore
     public void setPublishedAt(Timestamp publishedAt) {
         this.publishedAt = publishedAt;
     }
@@ -127,6 +131,7 @@ public class PostEntity implements Serializable {
         return createdAt;
     }
 
+    @JsonIgnore
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
     }
@@ -135,6 +140,7 @@ public class PostEntity implements Serializable {
         return updatedAt;
     }
 
+    @JsonIgnore
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
     }
@@ -143,6 +149,7 @@ public class PostEntity implements Serializable {
         return comments;
     }
 
+    @JsonIgnore
     public void setComments(List<CommentEntity> comments) {
         this.comments = comments;
     }
@@ -151,6 +158,7 @@ public class PostEntity implements Serializable {
         return tags;
     }
 
+    @JsonIgnore
     public void setTags(List<TagEntity> tags) {
         this.tags = tags;
     }

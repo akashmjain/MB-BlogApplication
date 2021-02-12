@@ -1,0 +1,22 @@
+/* for creating coment*/
+localhost:8080/comment/create?postId={id} | POST request
+{
+    "name" : "Test1",
+    "email" : "test1@email.com",
+    "comment" : "Nothing really"
+}
+
+/* For reading posts */
+locahost:8080/ | GET request
+
+/* For reading single post */
+locahost:8080/read/post?postId={id} | GET request
+
+/* For creating post */
+locahost:8080/user/create/ | POST REQUEST
+{
+"title" : "demo title",
+"excerpt" : "excerpt dummy data",
+"content" : "dummy content data for blog",
+"isPublished" : true
+}

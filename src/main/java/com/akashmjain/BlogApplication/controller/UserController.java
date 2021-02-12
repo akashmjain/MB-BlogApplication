@@ -13,10 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -36,8 +33,12 @@ public class UserController {
 
     private final int EXCERPT_SIZE = 100;
 
-    /* POST SECTION FOR USERS */
+    @GetMapping("/hello")
+    public String demo() {
+        return "Hello World";
+    }
 
+    /* POST SECTION FOR USERS */
     @RequestMapping("/post/create")
     public String createPost(Model model) {
         PostEntity postEntity = new PostEntity();

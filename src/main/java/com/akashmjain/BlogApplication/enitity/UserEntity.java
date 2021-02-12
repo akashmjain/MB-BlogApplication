@@ -1,6 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class UserEntity implements Serializable {
     private String email;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "roles")
@@ -31,9 +33,8 @@ public class UserEntity implements Serializable {
     @OneToMany(mappedBy = "author",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
-    @JsonBackReference
+    @JsonIgnore
     private List<PostEntity> posts;
-
 
     public UserEntity() {}
 

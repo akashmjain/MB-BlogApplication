@@ -11,7 +11,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,8 +29,7 @@ public class AnonymousController {
     private PostService postService;
     @Autowired
     private CommentService commentService;
-
-
+    private static final int PAGE_SIZE = 4;
     private String urlData;
 
     /* SEARCH AND FILTER SECTION */
@@ -42,61 +40,46 @@ public class AnonymousController {
                                   @RequestParam(value = "authorId", required = false) List<Integer> authorIds,
                                   @RequestParam(value = "order", required = false, defaultValue = "asc") String sortOrder,
                                   @RequestParam(value = "startDate", required = false) String startDate,
-                                  @RequestParam(value = "endDate", required = false) String endDate,
-                                  Model model) {
-        urlData = "?";
+                                  @RequestParam(value = "endDate", required = false) String endDate) {
         List<PostEntity> posts;
-        if (search == null && tagIds == null && authorIds == null)
+        System.out.println(search);
+        if (search == null)
             posts = postService.findAll();
         else {
-            posts = getFilteredPostEntityList(authorIds, tagIds, search);
+            posts = getPostEntityFromSearchQuery(authorIds, tagIds, search);
         }
         posts = posts.stream().filter(post -> post.getIsPublished()).collect(Collectors.toList());
         posts = getUniquePostEntityList(posts);
         posts = getPostFilteredByDate(startDate, endDate, posts);
         posts = getSortedPostEntityList(posts, sortOrder);
         posts = getPostFilteredByDate(startDate, endDate, posts);
-        Page<PostEntity> page = getPaginatedData(posts, pageNo, 4);
-        model.addAttribute("totalPages",page.getTotalPages());
-        model.addAttribute("posts", page.getContent());
-        model.addAttribute("pathTo", urlData);
-        model.addAttribute("allUsers", userService.findAll());
-        model.addAttribute("allTags", tagService.findAll());
-
-        return posts;
+        Page<PostEntity> page = getPaginatedData(posts, pageNo, PAGE_SIZE);
+        return page.getContent();
     }
 
-    @RequestMapping("/post/read")
-    public String readPost(@RequestParam("postId") int postId, Model model) {
+    @GetMapping("/post/read")
+    public PostEntity readPost(@RequestParam("postId") int postId) throws Exception {
         if (postService.findById(postId).getIsPublished()) {
-            model.addAttribute("postEntity", postService.findById(postId));
-            return "show_blog";
+            return postService.findById(postId);
         } else {
-            return "redirect:/error?error=The page is not published yet";
+            throw new Exception("Item not found");
         }
     }
 
     /* COMMENT SECTION */
-    @RequestMapping("/comment/create")
-    public String createComment(@RequestParam("postId") int postId, Model model) {
-        PostEntity postEntity = postService.findById(postId);
-        CommentEntity commentEntity = new CommentEntity();
+    @PostMapping(value="/comment/create", consumes={"application/json"})
+    public @ResponseBody CommentEntity createComment(@RequestBody CommentEntity commentEntity, @RequestParam(value = "postId", required = true) int postId) throws Exception {
         commentEntity.setCreatedAt(new Timestamp(System.currentTimeMillis()));
         commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
-        commentEntity.setPostEntity(postEntity);
         commentEntity.setId(0);
-        model.addAttribute("commentEntity", commentEntity);
-        return "comment_create_form";
-    }
-
-    @RequestMapping("/comment/create/save")
-    public String saveComment(@ModelAttribute("commentEntity") CommentEntity commentEntity) {
-        commentEntity.setId(0); // to make sure that Id not passed and brand new comment is created
-        commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+        if(postService.findById(postId) == null) {
+            throw new Exception("Not found Post with Id " + postService.findById(postId));
+        } else {
+            commentEntity.setPostEntity(postService.findById(postId));
+        }
         commentService.save(commentEntity);
-        return "redirect:/post/read?postId=" + commentEntity.getPostEntity().getId();
+        return commentEntity;
     }
-
     /*Search and Filter Helper methods*/
     private List<PostEntity> getUniquePostEntityList(List<PostEntity> posts) {
         Set<PostEntity> set = new LinkedHashSet<>(posts);
@@ -116,25 +99,18 @@ public class AnonymousController {
         return modifiableList;
     }
 
-    private List<PostEntity> getFilteredPostEntityList(List<Integer> authorIds, List<Integer> tagIds, String search) {
+    private List<PostEntity> getPostEntityFromSearchQuery(List<Integer> authorIds, List<Integer> tagIds, String search) {
         List<PostEntity> posts = new ArrayList<>();
         if (search != null) {
             posts.addAll(postService.getPostsBySearchString(search));
             posts.addAll(userService.getPostsByUserName(search));
             posts.addAll(tagService.getPostsByTagName(search));
-            urlData += "search="+search;
         }
         if (authorIds != null) {
             posts = userService.getPostsByUserIdList(authorIds, posts);
-            for(int id : authorIds) {
-                urlData += "&authorId="+id;
-            }
         }
         if (tagIds != null) {
             posts = tagService.getPostsByTagIdList(tagIds, posts);
-            for(int id : tagIds) {
-                urlData += "&tagId=" + id;
-            }
         }
         return posts;
     }

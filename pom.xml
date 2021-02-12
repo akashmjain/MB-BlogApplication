@@ -62,6 +62,7 @@
             <version>RELEASE</version>
             <scope>compile</scope>
         </dependency>
+		<!--	JSON	-->
 
 		<!-- Testing -->
 		<dependency>

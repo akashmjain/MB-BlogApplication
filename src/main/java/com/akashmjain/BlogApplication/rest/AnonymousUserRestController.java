@@ -71,13 +71,18 @@ public class AnonymousUserRestController {
         }
     }
 
-    @GetMapping("comments")
+    @GetMapping("/comments")
     public List<CommentEntity> getCommentsByPostId(@RequestParam("postId") int postId) throws Exception {
         if (postService.findById(postId) == null) {
             throw new Exception("Post not found");
         } else {
             return postService.findById(postId).getComments();
         }
+    }
+
+    @GetMapping("/comment")
+    public CommentEntity getCommentById(@RequestParam("commentId") int commentId) {
+        return commentService.findById(commentId);
     }
 
     @PostMapping("/comment/create")

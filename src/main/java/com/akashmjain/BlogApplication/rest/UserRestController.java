@@ -39,7 +39,7 @@ public class UserRestController {
     }
 
     @PostMapping("/post/create")
-    public PostEntity saveNewPost(@RequestBody PostEntity postEntity,
+    public PostEntity createNewPost(@RequestBody PostEntity postEntity,
                               @RequestParam("tagStringData") String tagString) throws Exception {
         Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (principal instanceof UserDetails) {

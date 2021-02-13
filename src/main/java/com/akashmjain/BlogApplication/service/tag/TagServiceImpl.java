@@ -63,7 +63,7 @@ public class TagServiceImpl implements TagService {
     @Override
     public List<PostEntity> getPostsByTagIdList(List<Integer> tagIds, List<PostEntity> postEntities) {
         List<PostEntity> posts = new ArrayList<>();
-        if (postEntities == null) {
+        if (postEntities == null || postEntities.isEmpty()) {
             for (int tagId : tagIds) {
                 posts.addAll(this.findById(tagId).getPosts());
             }

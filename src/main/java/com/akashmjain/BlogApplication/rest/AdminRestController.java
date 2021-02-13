@@ -11,4 +11,5 @@ public class AdminRestController {
     public String echo() {
         return "echo from ADMIN";
     }
+    
 }

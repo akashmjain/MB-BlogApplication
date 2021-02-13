@@ -44,11 +44,11 @@ public class AnonymousUserRestController {
                                              @RequestParam(value = "startDate", required = false) String startDate,
                                              @RequestParam(value = "endDate", required = false) String endDate) {
         List<PostEntity> posts;
-        if (search == null && tagIds == null && authorIds == null)
-            posts = postService.findAll();
-        else {
+        posts = postService.findAll();
+        if (search != null ||  tagIds != null || authorIds != null) {
             posts = getFilteredPostEntityList(authorIds, tagIds, search);
         }
+        System.out.println(posts);
         posts = posts.stream().filter(post -> post.getIsPublished()).collect(Collectors.toList());
         posts = getUniquePostEntityList(posts);
         posts = getPostFilteredByDate(startDate, endDate, posts);
@@ -98,9 +98,15 @@ public class AnonymousUserRestController {
     public List<TagEntity> getTags() {
         return tagService.findAll();
     }
+
     @GetMapping("/tag")
     public TagEntity getTagById(@RequestParam("tagId") int tagId) {
         return tagService.findById(tagId);
+    }
+
+    @GetMapping("/tagpost")
+    public List<TagEntity> getTagByPostId(@RequestParam("postId") int postId) {
+        return postService.findById(postId).getTags();
     }
 
     @GetMapping("/users")
@@ -138,7 +144,6 @@ public class AnonymousUserRestController {
             posts.addAll(postService.getPostsBySearchString(search));
             posts.addAll(userService.getPostsByUserName(search));
             posts.addAll(tagService.getPostsByTagName(search));
-
         }
         if (authorIds != null) {
             posts = userService.getPostsByUserIdList(authorIds, posts);

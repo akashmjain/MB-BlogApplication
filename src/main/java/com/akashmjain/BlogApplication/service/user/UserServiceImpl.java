@@ -48,12 +48,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<PostEntity> getPostsByUserIdList(List<Integer> authorIds, List<PostEntity> postEntities) {
-        if (postEntities != null)
-            postEntities.removeIf(post -> !authorIds.contains(post.getAuthor().getId()));
-        else {
+        if (postEntities == null || postEntities.isEmpty()) {
             for (int id : authorIds) {
                 postEntities.addAll(this.findById(id).getPosts());
             }
+        } else {
+            postEntities.removeIf(post -> !authorIds.contains(post.getAuthor().getId()));
         }
         return postEntities;
     }

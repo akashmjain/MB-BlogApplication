@@ -1,12 +1,15 @@
 package com.akashmjain.BlogApplication.rest;
 
+import com.akashmjain.BlogApplication.enitity.CommentEntity;
 import com.akashmjain.BlogApplication.enitity.PostEntity;
+import com.akashmjain.BlogApplication.enitity.UserEntity;
 import com.akashmjain.BlogApplication.service.comment.CommentService;
 import com.akashmjain.BlogApplication.service.post.PostService;
 import com.akashmjain.BlogApplication.service.tag.TagService;
 import com.akashmjain.BlogApplication.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,7 +38,7 @@ public class UserRestController {
         return "HELLO " + username;
     }
 
-    @RequestMapping("/post/create")
+    @PostMapping("/post/create")
     public PostEntity saveNewPost(@RequestBody PostEntity postEntity,
                               @RequestParam("tagStringData") String tagString) throws Exception {
         Object principal =  SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -59,5 +62,89 @@ public class UserRestController {
             throw new Exception("Non logged in user");
         }
         return postEntity;
+    }
+
+    @PutMapping("/post/update")
+    public PostEntity updatePost(@RequestBody PostEntity post, @RequestParam("tagStringData") String tags) throws Exception {
+        PostEntity postEntity = postService.findById(post.getId());
+        if (postEntity == null) {
+            throw new Exception("Post with ID : " + post.getId() + " Not found");
+        }
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if (username.equals(postEntity.getAuthor().getName())) {
+                postEntity.setTitle(post.getTitle());
+                postEntity.setExcerpt(post.getExcerpt());
+                postEntity.setContent(post.getContent());
+                postEntity.setIsPublished(post.getIsPublished());
+                if (postEntity.getIsPublished()) {
+                    postEntity.setPublishedAt(new Timestamp(System.currentTimeMillis()));
+                } else {
+                    postEntity.setPublishedAt(null);
+                }
+                postService.save(postEntity);
+            } else {
+                throw new Exception("No Principal found");
+            }
+        }
+        return postEntity;
+    }
+
+    @DeleteMapping("/post/delete")
+    public String deletePost(@RequestParam("postId") int postId) throws Exception {
+
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if (username.equals(postService.findById(postId).getAuthor().getName())) {
+                postService.deleteById(postId);
+                return "deletion success";
+            } else {
+                throw new Exception("You are not authenticated User");
+            }
+        } else {
+            throw new Exception("Principal not valid");
+        }
+    }
+
+    @PutMapping("/comment/update")
+    public CommentEntity updateComment(@RequestBody CommentEntity comment) throws Exception {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            CommentEntity commentEntity = commentService.findById(comment.getId());
+            if (commentEntity == null) {
+                throw new Exception("Comment Entity with this Id is not found");
+            }
+            if (commentEntity.getPostEntity().getAuthor().getName().equals(username)) {
+                commentEntity.setName(comment.getName());
+                commentEntity.setEmail(comment.getEmail());
+                commentEntity.setComment(comment.getComment());
+                commentEntity.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
+                commentService.save(commentEntity);
+                return commentEntity;
+            } else {
+                throw new Exception("User is not authorized (its not your comment)");
+            }
+        } else {
+            throw new Exception("Principal is not valid");
+        }
+    }
+
+    @DeleteMapping("/comment/delete")
+    public String deleteComment(@RequestParam("commentId") int commentId) throws Exception {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof UserDetails) {
+            String username = ((UserDetails) principal).getUsername();
+            if (username.equals(commentService.findById(commentId).getPostEntity().getAuthor().getName())) {
+                commentService.deleteById(commentId);
+                return "deletion success";
+            } else {
+                throw new Exception("User is not allowed to delete this comment");
+            }
+        } else {
+            throw new Exception("Principal is not valid");
+        }
     }
 }

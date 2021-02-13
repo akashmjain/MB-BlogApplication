@@ -1,5 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -24,6 +26,7 @@ public class PostEntity {
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                             CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "author")
+    @JsonIgnore
     private UserEntity author;
 
     @Column(name = "published_at")
@@ -40,6 +43,7 @@ public class PostEntity {
 
     @OneToMany(mappedBy = "postEntity",
                     cascade = {CascadeType.ALL})
+    @JsonIgnore
     private List<CommentEntity> comments;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
@@ -48,6 +52,7 @@ public class PostEntity {
             joinColumns = @JoinColumn(name = "post_id"),
             inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
+    @JsonIgnore
     private List<TagEntity> tags;
 
     public PostEntity() {}

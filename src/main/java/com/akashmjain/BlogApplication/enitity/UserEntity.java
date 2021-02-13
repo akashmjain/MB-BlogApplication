@@ -1,5 +1,6 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.annotation.ReadOnlyProperty;
 
 import javax.persistence.*;
@@ -20,6 +21,7 @@ public class UserEntity {
     private String email;
 
     @Column(name = "password")
+    @JsonIgnore
     private String password;
 
     @Column(name = "roles")
@@ -29,6 +31,7 @@ public class UserEntity {
     @OneToMany(mappedBy = "author",
             cascade = {CascadeType.PERSIST, CascadeType.MERGE,
                     CascadeType.DETACH, CascadeType.REFRESH})
+    @JsonIgnore
     private List<PostEntity> posts;
 
 

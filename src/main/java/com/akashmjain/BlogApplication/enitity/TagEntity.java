@@ -1,5 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
@@ -21,6 +23,15 @@ public class TagEntity {
     @Column(name = "updated_at")
     private Timestamp updatedAt;
 
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
+    @JoinTable(
+            name = "post_tags",
+            joinColumns = @JoinColumn(name = "tag_id"),
+            inverseJoinColumns = @JoinColumn(name = "post_id")
+    )
+    @JsonIgnore
+    private List<PostEntity> posts;
+
     public TagEntity() {}
 
     public TagEntity(int id, String name, Timestamp createdAt, Timestamp updatedAt, List<PostEntity> posts) {
@@ -31,13 +42,6 @@ public class TagEntity {
         this.posts = posts;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.DETACH, CascadeType.REFRESH})
-    @JoinTable(
-            name = "post_tags",
-            joinColumns = @JoinColumn(name = "tag_id"),
-            inverseJoinColumns = @JoinColumn(name = "post_id")
-    )
-    private List<PostEntity> posts;
 
     public int getId() {
         return id;

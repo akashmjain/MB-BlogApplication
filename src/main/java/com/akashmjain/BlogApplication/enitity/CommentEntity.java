@@ -1,5 +1,7 @@
 package com.akashmjain.BlogApplication.enitity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
@@ -22,6 +24,7 @@ public class CommentEntity {
 
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE,CascadeType.DETACH, CascadeType.REFRESH})
     @JoinColumn(name = "post_id")
+    @JsonIgnore
     private PostEntity postEntity;
 
     @Column(name = "created_at")
